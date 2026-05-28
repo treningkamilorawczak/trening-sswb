@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .canvas {
+    width: 1200px;
+    height: 630px;
+    position: relative;
+    background: #000;
+    overflow: hidden;
+    font-family: 'Space Grotesk', sans-serif;
+    color: #F2EFEE;
+  }
+
+  /* Hero image background — subtle */
+  .bg-image {
+    position: absolute;
+    inset: 0;
+    background-image: url('img/hero-image.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(20%) brightness(0.45) contrast(1.1) saturate(1.1);
+  }
+
+  /* Ember glow overlays — matching the site */
+  .overlay-1 {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 30%, rgba(235, 92, 28, 0.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 70%, rgba(198, 53, 44, 0.30) 0%, transparent 55%),
+      linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
+  }
+
+  .overlay-2 {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, transparent 50%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .content {
+    position: absolute;
+    inset: 0;
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 10;
+  }
+
+  /* TOP — Tag */
+  .top-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .tag {
+    display: inline-block;
+    background: #C6352C;
+    color: #F2EFEE;
+    padding: 10px 20px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 13px;
+    transform: skewX(-8deg);
+    box-shadow: 4px 4px 0 #030504;
+  }
+  .tag span { display: inline-block; transform: skewX(8deg); }
+
+  .top-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* CENTER — Hero text */
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px 0;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    line-height: 0.92;
+    letter-spacing: 0.015em;
+    text-transform: uppercase;
+    color: #F2EFEE;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  .hero-title .accent { color: #C6352C; }
+  .hero-title .ember { color: #EB5C1C; }
+
+  .hero-sub {
+    margin-top: 24px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    color: #D9D0CD;
+    max-width: 800px;
+    line-height: 1.4;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  }
+
+  /* BOTTOM — logos */
+  .bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .logos {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .logo-tp {
+    height: 50px;
+    filter: brightness(1.05);
+  }
+  .logo-sswb {
+    height: 38px;
+  }
+  .logo-x {
+    color: #C6352C;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    opacity: 0.7;
+  }
+
+  .domain {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: #EB5C1C;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* HUD corner accents */
+  .corner {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border: 2px solid #C6352C;
+    opacity: 0.45;
+    z-index: 5;
+  }
+  .corner.tl { top: 24px; left: 24px; border-right: none; border-bottom: none; }
+  .corner.tr { top: 24px; right: 24px; border-left: none; border-bottom: none; }
+  .corner.bl { bottom: 24px; left: 24px; border-right: none; border-top: none; }
+  .corner.br { bottom: 24px; right: 24px; border-left: none; border-top: none; }
+
+</style>
+</head>
+<body>
+
+<div class="canvas">
+  <div class="bg-image"></div>
+  <div class="overlay-1"></div>
+  <div class="overlay-2"></div>
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="content">
+
+    <div class="top-row">
+      <div class="tag"><span>Oficjalny partner SSWB</span></div>
+    </div>
+
+    <div class="hero">
+      <h1 class="hero-title">
+        Selekcja <span class="accent">czeka.</span><br>
+        <span class="ember">Przygotuj się.</span>
+      </h1>
+      <p class="hero-sub">
+        Indywidualne plany treningowe i coaching 1:1 według metodologii operatorów sił specjalnych.
+      </p>
+    </div>
+
+    <div class="bottom-row">
+      <div class="logos">
+        <img src="img/trenuj-profesjonalnie-transparent.png" alt="" class="logo-tp">
+        <span class="logo-x">×</span>
+        <img src="img/sswb-logo.png" alt="" class="logo-sswb">
+      </div>
+      <div class="domain">trening-sswb.pl</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

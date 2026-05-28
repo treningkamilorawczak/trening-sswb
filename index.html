@@ -29,13 +29,20 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    background: var(--bg-primary);
+    overflow-x: hidden;
+    width: 100%;
+  }
   body {
     background: var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Space Grotesk', sans-serif;
     line-height: 1.6;
     overflow-x: hidden;
+    width: 100%;
+    position: relative;
   }
 
   /* Ember background */
@@ -1419,7 +1426,8 @@
     animation: marquee-scroll 60s linear infinite;
     will-change: transform;
   }
-  .testimonials-marquee:hover .testimonials-track {
+  .testimonials-marquee:hover .testimonials-track,
+  .testimonials-marquee.paused .testimonials-track {
     animation-play-state: paused;
   }
   .testimonials-track .testimonial-card {
@@ -2446,8 +2454,6 @@ window.addEventListener('scroll', function() {
       <p class="quote-text">Adaptacje treningowe są specyficzne dla zastosowanego bodźca. Jeżeli chcemy trenować specyficznie, to musimy bardzo dobrze znać wymagania danej dyscypliny lub danego eventu, do którego chcemy się przygotować.</p>
       <p class="quote-text">Im bliżej trening odzwierciedla rzeczywiste zadania, tym lepsze przeniesienie efektów na gotowość operacyjną.</p>
       <div class="quote-logo">
-        <img src="img/tier-one-pro-logo.png" alt="TIER ONE PRO" class="quote-logo-img" style="height: 64px; border-radius: 6px;">
-        <span class="quote-logo-x">×</span>
         <img src="img/trenuj-profesjonalnie-transparent.png" alt="TRENUJ PROFESJONALNIE" class="quote-logo-img">
         <span class="quote-logo-x">×</span>
         <img src="img/sswb-logo.png" alt="Siły Specjalne w Biznesie" class="quote-logo-img quote-logo-sswb">
@@ -2697,7 +2703,8 @@ window.addEventListener('scroll', function() {
       <h2>Co mówią ludzie,<br>z którymi <span class="accent">pracowałem.</span></h2>
     </div>
 
-    <div class="testimonials-marquee" role="region" aria-label="Opinie klientów">
+    <p style="text-align: center; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px;">Najedź lub dotknij, aby zatrzymać</p>
+    <div class="testimonials-marquee" role="region" aria-label="Opinie klientów" onclick="this.classList.toggle('paused')" style="cursor: pointer;">
       <div class="testimonials-track">
         <!-- ORYGINALNE 4 KARTY -->
         <div class="testimonial-card">

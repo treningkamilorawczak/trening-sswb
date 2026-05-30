@@ -1435,34 +1435,30 @@
     font-family: 'DM Mono', monospace;
   }
 
-  /* === TESTIMONIALS — MARQUEE === */
+  /* === TESTIMONIALS — INFINITE SCROLL (JS-DRIVEN) === */
   .testimonials-marquee {
     position: relative;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     width: 100%;
     margin-top: 24px;
     padding: 8px 0 16px;
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
             mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .testimonials-marquee::-webkit-scrollbar {
+    display: none;
   }
   .testimonials-track {
     display: flex;
     gap: 24px;
     width: max-content;
-    animation: marquee-scroll 60s linear infinite;
-    will-change: transform;
-  }
-  .testimonials-marquee:hover .testimonials-track,
-  .testimonials-marquee.paused .testimonials-track {
-    animation-play-state: paused;
   }
   .testimonials-track .testimonial-card {
     flex: 0 0 380px;
     margin: 0;
-  }
-  @keyframes marquee-scroll {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(calc(-50% - 12px)); }
   }
   .testimonials-marquee-hint {
     text-align: center;
@@ -1476,12 +1472,6 @@
   }
   @media (max-width: 700px) {
     .testimonials-track .testimonial-card { flex: 0 0 300px; }
-    .testimonials-track { animation-duration: 45s; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .testimonials-track { animation: none; transform: none; }
-    .testimonials-marquee { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-    .testimonials-track .testimonial-card { scroll-snap-align: start; }
   }
   .testimonial-card {
     background: var(--bg-card);
@@ -2226,6 +2216,65 @@ window.addEventListener('scroll', function() {
     ctaEl.classList.remove('fc-hidden');
   }
 });
+
+// === TESTIMONIALS — INFINITE LOOP CAROUSEL ===
+(function() {
+  var marquee = document.querySelector('.testimonials-marquee');
+  var track = document.querySelector('.testimonials-track');
+  if (!marquee || !track) return;
+
+  var isHovering = false;
+  var touchResumeAt = 0;
+  var halfWidth = 0;
+  var ticking = false;
+
+  function recompute() {
+    halfWidth = track.scrollWidth / 2;
+  }
+
+  function speed() {
+    return window.innerWidth <= 700 ? 0.45 : 0.55;
+  }
+
+  function loopCheck() {
+    if (halfWidth <= 0) return;
+    if (marquee.scrollLeft >= halfWidth) {
+      marquee.scrollLeft -= halfWidth;
+    } else if (marquee.scrollLeft < 0) {
+      marquee.scrollLeft += halfWidth;
+    }
+  }
+
+  function tick() {
+    var now = Date.now();
+    var userPaused = isHovering || now < touchResumeAt;
+    if (!userPaused) {
+      marquee.scrollLeft += speed();
+    }
+    loopCheck();
+    requestAnimationFrame(tick);
+  }
+
+  marquee.addEventListener('mouseenter', function() { isHovering = true; });
+  marquee.addEventListener('mouseleave', function() { isHovering = false; });
+  marquee.addEventListener('touchstart', function() { touchResumeAt = Date.now() + 99999; }, { passive: true });
+  marquee.addEventListener('touchend', function() { touchResumeAt = Date.now() + 1500; }, { passive: true });
+  marquee.addEventListener('scroll', function() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function() { loopCheck(); ticking = false; });
+  }, { passive: true });
+
+  window.addEventListener('resize', recompute);
+  window.addEventListener('load', function() {
+    recompute();
+    requestAnimationFrame(tick);
+  });
+  if (document.readyState === 'complete') {
+    recompute();
+    requestAnimationFrame(tick);
+  }
+})();
 </script>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -2340,12 +2389,12 @@ window.addEventListener('scroll', function() {
               <div class="method-head">
                 <span class="head-num">01</span>
                 <span class="head-title">ATP-PCr</span>
-                <span class="head-meta">Eksplozja</span>
+                <span class="head-meta">Eksplozywność</span>
                 <span class="head-toggle">+</span>
               </div>
               <div class="method-body">
                 <div class="method-body-inner">
-                  <p>Najszybszy system dostarczania energii — działa w pierwszych sekundach maksymalnego wysiłku. Sprint, skok przez przeszkodę, wyważanie wejścia. Bez niego odpuszczasz w kluczowych momentach selekcji.</p>
+                  <p>Najszybszy system dostarczania energii — działa w pierwszych sekundach maksymalnego wysiłku. Sprint, skok przez przeszkodę, wyważanie wejścia. Bez niego odpuszczasz w kluczowych momentach.</p>
                   <p style="color: var(--orange-ember); font-family: 'DM Mono', monospace; font-size: 13px; font-style: italic; padding-top: 12px; border-top: 1px solid var(--border-subtle);">→ Twój indywidualny protokół dobieramy po testach sprawnościowych</p>
                 </div>
               </div>
@@ -2360,7 +2409,7 @@ window.addEventListener('scroll', function() {
               </div>
               <div class="method-body">
                 <div class="method-body-inner">
-                  <p>System odpowiedzialny za intensywne wysiłki trwające od kilkunastu sekund do 2 minut. Walka, pościg, forsowne wejście. To tutaj większość ludzi "łapie ścianę" na selekcji — bo nie trenowali tego systemu.</p>
+                  <p>System odpowiedzialny za intensywne wysiłki trwające od kilkunastu sekund do 2 minut. Walka, pościg, forsowne wejście. To tutaj większość ludzi "łapie ścianę" — bo nie trenowali tego systemu.</p>
                   <p style="color: var(--orange-ember); font-family: 'DM Mono', monospace; font-size: 13px; font-style: italic; padding-top: 12px; border-top: 1px solid var(--border-subtle);">→ Intensywność interwałów ustalamy na podstawie Twojego progu mleczanowego</p>
                 </div>
               </div>
@@ -2435,7 +2484,7 @@ window.addEventListener('scroll', function() {
               </div>
               <div class="method-body">
                 <div class="method-body-inner">
-                  <p>Wzorce ruchowe z realnych zadań — pchanie, ciągnięcie, przenoszenie, stabilizacja, rotacja. Nie trenujemy "na siłowni". Trenujemy ruchy, które wykonujesz na selekcji.</p>
+                  <p>Wzorce ruchowe z realnych zadań — pchanie, ciągnięcie, przenoszenie, stabilizacja, rotacja. Nie trenujemy "na siłowni". Trenujemy ruchy, które są specyficzne do powierzonych zadań.</p>
                   <p style="color: var(--orange-ember); font-family: 'DM Mono', monospace; font-size: 13px; font-style: italic; padding-top: 12px; border-top: 1px solid var(--border-subtle);">→ Ćwiczenia dobieramy pod specyfikę Twojej edycji SSWB</p>
                 </div>
               </div>
@@ -2717,7 +2766,7 @@ window.addEventListener('scroll', function() {
         <img src="img/darek.jpg" alt="Dariusz Kostkowski" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; object-position: center top; border: 2px solid var(--orange-ember);">
       </div>
       <div>
-        <div style="font-family: 'DM Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--orange-ember); margin-bottom: 6px;">Zwycięzca warsztatów SSWB</div>
+        <div style="font-family: 'DM Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--orange-ember); margin-bottom: 6px;">Zwycięzca warsztatów SSWB w wersji Extreme</div>
         <div style="font-family: 'Bebas Neue', sans-serif; font-size: 32px; line-height: 1; margin-bottom: 12px;">Dariusz Kostkowski</div>
         <p style="font-size: 15px; margin-bottom: 16px;">16 tygodni systematycznej pracy. Dariusz nie tylko ukończył — <strong style="color: var(--orange-ember);">wygrał całą edycję</strong>.</p>
         <p style="font-size: 15px; font-style: italic; border-left: 2px solid var(--red-primary); padding-left: 16px; margin: 0;">"Przed Kamilem trenowałem 'na czuja'. Po 3 tygodniach widziałem różnicę w HRV. Po 8 tygodniach byłem gotowy. Na warsztatach byłem pierwszy."</p>
@@ -2729,8 +2778,8 @@ window.addEventListener('scroll', function() {
       <h2>Co mówią ludzie,<br>z którymi <span class="accent">pracowałem.</span></h2>
     </div>
 
-    <p style="text-align: center; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px;">Najedź lub dotknij, aby zatrzymać</p>
-    <div class="testimonials-marquee" role="region" aria-label="Opinie klientów" onclick="this.classList.toggle('paused')" style="cursor: pointer;">
+    <p style="text-align: center; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px;">Przewijaj palcem lub poczekaj — opinie lecą w pętli</p>
+    <div class="testimonials-marquee" role="region" aria-label="Opinie klientów">
       <div class="testimonials-track">
         <!-- ORYGINALNE 4 KARTY -->
         <div class="testimonial-card">
@@ -2746,7 +2795,7 @@ window.addEventListener('scroll', function() {
           <div class="testimonial-quote">"Pomimo obaw przed siłownią — wszystko zrealizowałem. Pompki, podciąganie się bez większego wysiłku."</div>
           <div class="testimonial-meta">
             <div class="testimonial-name">Dariusz Kostkowski</div>
-            <div class="testimonial-role">CEO Bella sp. z o.o. · +14 kg masy mięśniowej</div>
+            <div class="testimonial-role">CEO Bella sp. z o.o. · +4 kg masy mięśniowej</div>
           </div>
         </div>
         <div class="testimonial-card">
@@ -2779,7 +2828,7 @@ window.addEventListener('scroll', function() {
           <div class="testimonial-quote">"Pomimo obaw przed siłownią — wszystko zrealizowałem. Pompki, podciąganie się bez większego wysiłku."</div>
           <div class="testimonial-meta">
             <div class="testimonial-name">Dariusz Kostkowski</div>
-            <div class="testimonial-role">CEO Bella sp. z o.o. · +14 kg masy mięśniowej</div>
+            <div class="testimonial-role">CEO Bella sp. z o.o. · +4 kg masy mięśniowej</div>
           </div>
         </div>
         <div class="testimonial-card" aria-hidden="true">
@@ -2864,19 +2913,15 @@ window.addEventListener('scroll', function() {
     <div class="faq-list">
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Dla kogo jest ten program?</div>
-        <div class="faq-a"><div class="faq-a-inner">Dla mężczyzn 30-55 lat, zarezerwowanych na SOFT/HARD/EXTREME lub planujących aplikację. Wymagamy bazy minimum 3 miesięcy regularnej aktywności fizycznej. Nie pracujemy z zupełnymi początkującymi - wcześniej musisz przejść podstawową adaptację.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Dla mężczyzn 30-55 lat, zarezerwowanych na SOFT/HARD/EXTREME lub planujących aplikację. Optymalnie masz za sobą minimum 3 miesiące regularnej aktywności fizycznej. Jeżeli jesteś początkujący — bez obaw, pomożemy Ci przejść przez podstawową adaptację, żebyś bezpiecznie wszedł na właściwy poziom treningu.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Jaka jest forma konsultacji?</div>
-        <div class="faq-a"><div class="faq-a-inner">Zoom, telefon, WhatsApp, Signal - to co Ci pasuje. Częstotliwość uzgadniamy indywidualnie (typowo 2-4 razy w miesiącu, w zależności od pakietu i etapu przygotowań). Konsultacja pre-zakupowa GRATIS - sprawdzimy czy pasujemy.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Zoom, telefon, WhatsApp, Google Meet - to co Ci pasuje. Częstotliwość uzgadniamy indywidualnie (typowo 2-4 razy w miesiącu, w zależności od pakietu i etapu przygotowań). Konsultacja pre-zakupowa GRATIS - sprawdzimy czy pasujemy.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Jakiego zegarka potrzebuję?</div>
         <div class="faq-a"><div class="faq-a-inner">Garmin, Apple Watch, Polar, Coros, Suunto, Fitbit - dowolny z monitoringiem HR i HRV. Jeśli nie masz - polecę odpowiedni model po krótkiej rozmowie. Niektóre testy można wykonać też bez zegarka, ale monitoring HRV jest mocno rekomendowany.</div></div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Co jeśli odniosę kontuzję?</div>
-        <div class="faq-a"><div class="faq-a-inner">Pracujemy z fizjoterapeutą partnerskim - skierujemy Cię szybko. Plan jest dostosowywany do Twojego stanu. Priorytet zawsze: ZDROWIE &gt; WYDOLNOŚĆ. Nie pchamy w trening, który grozi pogłębieniem urazu.</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Czy mogę kupić tylko plan bez konsultacji?</div>
@@ -2884,7 +2929,7 @@ window.addEventListener('scroll', function() {
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Czy płacę z góry czy miesięcznie?</div>
-        <div class="faq-a"><div class="faq-a-inner">Oba opcje. Płatność z góry: -10-15% rabatu (zależnie od pakietu). Płatność miesięczna: 500 PLN/mc, możesz zrezygnować w każdym momencie (pobieramy tylko za zrealizowane miesiące).</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Obie opcje. Płatność z góry: -10-15% rabatu (zależnie od pakietu). Płatność miesięczna: 550 PLN/mc, możesz zrezygnować w każdym momencie (pobieramy tylko za zrealizowane miesiące).</div></div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Co jeśli zrezygnuję w trakcie?</div>
@@ -2976,7 +3021,7 @@ window.addEventListener('scroll', function() {
       </div>
     </div>
     <div class="footer-bottom">
-      © 2026 Kamil Orawczak Performance · NIP: [do uzupełnienia] · Wszelkie prawa zastrzeżone
+      © 2026 Kamil Orawczak Performance · Wszelkie prawa zastrzeżone
       <br><span class="mono">v0.1 mockup — design preview</span>
     </div>
   </div>

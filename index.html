@@ -1435,6 +1435,153 @@
     font-family: 'DM Mono', monospace;
   }
 
+  /* === SF — 4 ZASADY TRENINGU === */
+  .sf-stats {
+    position: relative;
+    margin: 48px 0 56px;
+    background:
+      radial-gradient(ellipse at top right, rgba(235, 92, 28, 0.06) 0%, transparent 50%),
+      linear-gradient(180deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+    padding: 48px 40px 52px;
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+  }
+  .sf-stats::before,
+  .sf-stats::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--orange-ember);
+  }
+  .sf-stats::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+  .sf-stats::after { bottom: 0; right: 0; border-left: none; border-top: none; }
+  .sf-stats-kicker {
+    display: inline-block;
+    background: var(--red-primary);
+    color: var(--text-primary);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    transform: skew(-8deg);
+    box-shadow: 3px 3px 0 var(--bg-section);
+    margin-bottom: 22px;
+  }
+  .sf-stats-kicker span { display: inline-block; transform: skew(8deg); }
+  .sf-stats-lead {
+    font-size: 20px;
+    color: var(--text-primary);
+    line-height: 1.55;
+    margin-bottom: 42px;
+    max-width: 820px;
+    font-weight: 300;
+  }
+  .sf-stats-lead strong {
+    color: var(--orange-ember);
+    font-weight: 600;
+    border-bottom: 2px solid var(--orange-ember);
+    padding-bottom: 1px;
+  }
+  .sf-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .sf-stat {
+    position: relative;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+    padding: 32px 28px 28px;
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  .sf-stat::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--red-primary);
+    transition: background 0.35s ease;
+  }
+  .sf-stat:nth-child(even)::before { background: var(--orange-ember); }
+  .sf-stat::after {
+    content: '';
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 10px;
+    height: 10px;
+    border-top: 1px solid var(--orange-ember);
+    border-right: 1px solid var(--orange-ember);
+    opacity: 0.5;
+    transition: opacity 0.35s ease;
+  }
+  .sf-stat:hover {
+    transform: translateY(-4px);
+    border-color: var(--orange-ember);
+    box-shadow: 0 12px 32px rgba(235, 92, 28, 0.18), 0 0 0 1px var(--orange-ember);
+  }
+  .sf-stat:hover::after { opacity: 1; }
+  .sf-stat:hover .sf-stat-ghost { opacity: 0.12; transform: translateX(-8px); }
+  .sf-stat-ghost {
+    position: absolute;
+    right: -10px;
+    bottom: -28px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 180px;
+    line-height: 1;
+    color: var(--orange-ember);
+    opacity: 0.06;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    letter-spacing: -0.02em;
+  }
+  .sf-stat-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    color: var(--orange-ember);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sf-stat-num::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--orange-ember);
+  }
+  .sf-stat-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1.05;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 2;
+  }
+  .sf-stat-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+  }
+  @media (max-width: 760px) {
+    .sf-stats { padding: 36px 22px 40px; }
+    .sf-stats-grid { grid-template-columns: 1fr; gap: 12px; }
+    .sf-stats-lead { font-size: 17px; }
+    .sf-stat { padding: 26px 22px 24px; }
+    .sf-stat-title { font-size: 24px; }
+    .sf-stat-ghost { font-size: 140px; bottom: -22px; right: -6px; }
+  }
+
   /* === TESTIMONIALS — INFINITE SCROLL (JS-DRIVEN) === */
   .testimonials-marquee {
     position: relative;
@@ -2373,6 +2520,40 @@ window.addEventListener('scroll', function() {
       <div class="tag"><span>Metodologia</span></div>
       <h2>To nie cudowny plan.<br><span class="accent">To metodologia działania</span><br>operatorów w trudnych warunkach.</h2>
       <p class="lead" style="margin: 0 auto;">Bazowana na wieloletnim doświadczeniu jako zawodnik oraz trener.</p>
+    </div>
+
+    <div class="sf-stats">
+      <div class="sf-stats-kicker"><span>◆ Jaki to jest trening</span></div>
+      <p class="sf-stats-lead">
+        Sportowiec optymalizuje wynik w jednej dyscyplinie. <strong>Tutaj liczy się gotowość</strong> — kiedy nie wiesz, co Cię czeka, ile to potrwa i w jakim stanie wejdziesz w zadanie.
+      </p>
+
+      <div class="sf-stats-grid">
+        <div class="sf-stat">
+          <span class="sf-stat-ghost">01</span>
+          <div class="sf-stat-num">Zasada 01</div>
+          <div class="sf-stat-title">Trenujemy zadania,<br>nie ćwiczenia.</div>
+          <p class="sf-stat-desc">Na warsztatach nie liczy się wynik na bieżni. Liczy się, czy zniesiesz „kolegę" przez 100 metrów, wejdziesz po linie i ruszysz dalej. Programujemy konkretne sytuacje, nie izolowane ruchy.</p>
+        </div>
+        <div class="sf-stat">
+          <span class="sf-stat-ghost">02</span>
+          <div class="sf-stat-num">Zasada 02</div>
+          <div class="sf-stat-title">Trenujemy pod<br>obciążeniem.</div>
+          <p class="sf-stat-desc">Każdy kilogram na sobie zmienia, jak działa Twoje ciało. Programujemy obciążenie — plecak, kamizelka, ekwipunek — żeby ciało było gotowe na warunki realnego zadania.</p>
+        </div>
+        <div class="sf-stat">
+          <span class="sf-stat-ghost">03</span>
+          <div class="sf-stat-num">Zasada 03</div>
+          <div class="sf-stat-title">Trenujemy<br>w zmęczeniu.</div>
+          <p class="sf-stat-desc">Nikt nie pyta, jak działasz na świeżo. Pytają, jak działasz po nieprzespanej nocy, gdy już nie chce Ci się myśleć. Programujemy ten stan świadomie, w bezpieczny sposób.</p>
+        </div>
+        <div class="sf-stat">
+          <span class="sf-stat-ghost">04</span>
+          <div class="sf-stat-num">Zasada 04</div>
+          <div class="sf-stat-title">Trenujemy wszystko<br>równocześnie.</div>
+          <p class="sf-stat-desc">Sport nagradza specjalistę. Warsztaty eliminują tego, kto ma jedną dziurę. To trening hybrydowy — siła, wytrzymałość, mobilność, szybkość, każda na poziomie. Nic na 100% i nic na 30%.</p>
+        </div>
+      </div>
     </div>
 
     <div class="method-group" onclick="this.classList.toggle('group-open'); var t=this.querySelector('.group-toggle'); t.textContent=this.classList.contains('group-open')?'Zwiń ▴':'Rozwiń ▾';">

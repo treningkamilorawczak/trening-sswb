@@ -1457,7 +1457,8 @@
   .sf-stats::before { top: 0; left: 0; border-right: none; border-bottom: none; }
   .sf-stats::after { bottom: 0; right: 0; border-left: none; border-top: none; }
   .sf-stats-kicker {
-    display: inline-block;
+    display: block;
+    width: fit-content;
     background: var(--red-primary);
     color: var(--text-primary);
     font-family: 'DM Mono', monospace;
@@ -1467,16 +1468,17 @@
     padding: 7px 14px;
     transform: skew(-8deg);
     box-shadow: 3px 3px 0 var(--bg-section);
-    margin-bottom: 22px;
+    margin: 0 auto 22px;
   }
   .sf-stats-kicker span { display: inline-block; transform: skew(8deg); }
   .sf-stats-lead {
     font-size: 20px;
     color: var(--text-primary);
     line-height: 1.55;
-    margin-bottom: 42px;
+    margin: 0 auto 42px;
     max-width: 820px;
     font-weight: 300;
+    text-align: center;
   }
   .sf-stats-lead strong {
     color: var(--orange-ember);
@@ -1565,6 +1567,7 @@
     letter-spacing: 0.01em;
     position: relative;
     z-index: 2;
+    text-align: center;
   }
   .sf-stat-desc {
     font-size: 15px;
@@ -2523,7 +2526,7 @@ window.addEventListener('scroll', function() {
     </div>
 
     <div class="sf-stats">
-      <div class="sf-stats-kicker"><span>◆ Jaki to jest trening</span></div>
+      <div class="sf-stats-kicker"><span>◆ Jak trenujemy</span></div>
       <p class="sf-stats-lead">
         Sportowiec optymalizuje wynik w jednej dyscyplinie. <strong>Tutaj liczy się gotowość</strong> — kiedy nie wiesz, co Cię czeka, ile to potrwa i w jakim stanie wejdziesz w zadanie.
       </p>

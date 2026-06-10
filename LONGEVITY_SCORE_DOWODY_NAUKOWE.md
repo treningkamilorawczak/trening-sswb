@@ -103,7 +103,17 @@ to nasza autorska heurystyka** — nie był walidowany jako całość.
 ze śmiertelnością (tętno spoczynkowe, sen)." ✅
 **Czego NIE wolno:** "naukowo zwalidowany indeks regeneracji" ❌
 
-### 7. Wagi Longevity Score (50% VO2max / 25% BMI / 25% regeneracja)
+### 7. "Norma VO2max dla wieku" (44/38 ml/kg/min w wieku 30, −0,35/rok)
+
+Przybliżenie populacyjnych wartości przeciętnych. Rząd wielkości zgodny z tabelami
+norm wydolnościowych, ale konkretne liczby to nasza heurystyka, nie cytat z badania.
+
+**Co wolno twierdzić:** "porównanie z przybliżoną normą dla Twojego wieku" ✅
+**Czego NIE wolno:** przypisywać tej normie konkretnego źródła naukowego ❌
+**TODO (opcjonalnie):** podmienić na percentyle z konkretnego źródła (np. tabele
+ACSM/FRIEND registry) i wtedy awansować na poziom A/B.
+
+### 8. Wagi Longevity Score (50% VO2max / 25% BMI / 25% regeneracja)
 
 Proporcje przyjęte przez nas (VO2max najwyżej, bo ma najsilniejsze dowody).
 Wagi są decyzją projektową, nie wynikiem badań.

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>extreme-sswb.pl + Longevity Score — MAKIETA OSADZENIA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ════ 1:1 design system ze strony SSWB ════ */
+  :root {
+    --bg-primary: #000000;
+    --bg-secondary: #1A1412;
+    --bg-section: #030504;
+    --bg-card: #1F1815;
+    --bg-card-hover: #2A201C;
+    --border-subtle: #2A201C;
+    --red-primary: #C6352C;
+    --red-hover: #D3362E;
+    --orange-ember: #EB5C1C;
+    --orange-light: #F4A261;
+    --warm-brown: #684E46;
+    --warm-taupe: #9B8179;
+    --text-primary: #F2EFEE;
+    --text-secondary: #D9D0CD;
+    --text-muted: #9B8179;
+    --success: #4ADE80;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; background: var(--bg-primary); overflow-x: hidden; }
+  body { background: var(--bg-primary); color: var(--text-primary); font-family: 'Space Grotesk', sans-serif; line-height: 1.6; overflow-x: hidden; position: relative; }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(235, 92, 28, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at 85% 60%, rgba(198, 53, 44, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 50% 90%, rgba(244, 162, 97, 0.03) 0%, transparent 40%);
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  .tag {
+    display: inline-block; background: var(--red-primary); color: var(--text-primary);
+    padding: 6px 16px; font-family: 'DM Mono', monospace; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 2px; font-size: 12px;
+    transform: skewX(-8deg); margin-bottom: 24px; box-shadow: 3px 3px 0 var(--bg-section);
+  }
+  .tag span { display: inline-block; transform: skewX(8deg); }
+  .tag.ember { background: var(--orange-ember); color: var(--bg-primary); }
+
+  h1, h2, h3 { color: var(--text-primary); }
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 9vw, 120px); text-transform: uppercase; line-height: 0.92; letter-spacing: 0.02em; font-weight: 400; }
+  h2 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(40px, 6vw, 72px); text-transform: uppercase; line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 24px; }
+  h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(20px, 2.5vw, 28px); margin-bottom: 16px; letter-spacing: 0.01em; }
+  .accent { color: var(--red-primary); }
+  .ember { color: var(--orange-ember); }
+  p { color: var(--text-secondary); font-size: 17px; line-height: 1.7; }
+  p.lead { color: var(--text-primary); font-size: 22px; line-height: 1.5; }
+
+  .btn {
+    display: inline-block; padding: 18px 36px; font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 14px;
+    text-decoration: none; cursor: pointer; transition: all 0.2s ease; border: none; position: relative; margin: 6px 4px 6px 0;
+  }
+  .btn-primary { background: var(--red-primary); color: var(--text-primary); box-shadow: 5px 5px 0 var(--bg-section); }
+  .btn-primary:hover { background: var(--red-hover); transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--bg-section); }
+  .btn-ember { background: var(--orange-ember); color: var(--bg-primary); box-shadow: 5px 5px 0 var(--bg-section); }
+  .btn-ember:hover { background: var(--orange-light); transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--bg-section); }
+  .btn-outline { background: transparent; color: var(--text-primary); border: 2px solid var(--red-primary); }
+  .btn-outline:hover { background: var(--red-primary); }
+  .btn-block { display: block; width: 100%; text-align: center; }
+
+  section { padding: 60px 0; position: relative; }
+  section.dark { background: var(--bg-section); }
+  section.warm { background: var(--bg-secondary); }
+
+  .hud-divider { display: flex; align-items: center; gap: 16px; margin: 40px 0; max-width: 600px; }
+  .hud-divider::before, .hud-divider::after { content: ''; flex: 1; height: 1px; background: var(--red-primary); opacity: 0.5; }
+  .hud-divider span { font-family: 'DM Mono', monospace; text-transform: uppercase; color: var(--red-primary); font-size: 11px; letter-spacing: 0.2em; }
+
+  nav.top-nav { position: sticky; top: 28px; background: rgba(0,0,0,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle); z-index: 100; padding: 16px 0; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-brand { display: flex; align-items: center; gap: 16px; text-decoration: none; }
+  .nav-brand .x { color: var(--red-primary); font-family: 'Bebas Neue', sans-serif; font-size: 24px; opacity: 0.7; }
+  .nav-brand .logo-tp { height: 60px; width: auto; display: block; object-fit: contain; }
+  .nav-brand .logo-sswb { height: 44px; width: auto; display: block; object-fit: contain; }
+  .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+  .nav-links a { color: var(--text-secondary); text-decoration: none; font-family: 'DM Mono', monospace; text-transform: uppercase; font-size: 12px; font-weight: 500; }
+  .nav-links a:hover { color: var(--orange-ember); }
+
+  .hero { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+  .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .hero-video-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.45) 50%, var(--bg-primary)); }
+  .hero .container { position: relative; z-index: 2; }
+  .hero-sub { font-size: 19px; margin: 24px 0 32px; max-width: 640px; color: var(--text-secondary); }
+
+  .problem-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 60px; }
+  .problem-card { background: var(--bg-card); border-top: 3px solid var(--red-primary); padding: 32px; position: relative; }
+  .problem-card .num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--red-primary); line-height: 1; margin-bottom: 16px; opacity: 0.5; }
+  .problem-card h3 { margin-bottom: 12px; }
+  .problem-card p { font-size: 16px; }
+
+  footer { padding: 40px 0; border-top: 1px solid var(--border-subtle); }
+
+  /* ════ Adnotacje makiety (nie wchodzą na produkcję) ════ */
+  .mockup-banner { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--success); color: #000; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; text-align: center; padding: 7px; }
+  .annot { position: relative; z-index: 5; display: flex; align-items: center; gap: 14px; justify-content: center; padding: 14px 24px; background: rgba(74,222,128,0.08); border-top: 2px dashed var(--success); border-bottom: 2px dashed var(--success); }
+  .annot span { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--success); }
+  .condensed { opacity: 0.4; }
+  .condensed-note { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); text-align: center; padding-top: 16px; }
+
+  /* ════ NOWA SEKCJA: OCENA GOTOWOŚCI / LONGEVITY SCORE ════ */
+  .lscore-box {
+    position: relative; max-width: 720px; margin: 48px auto 0;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+    border: 1px solid var(--border-subtle); padding: 44px 40px;
+  }
+  .lscore-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red-primary); }
+  .lscore-box::after { content: ''; position: absolute; top: 12px; right: 12px; width: 12px; height: 12px; border-top: 1px solid var(--orange-ember); border-right: 1px solid var(--orange-ember); opacity: 0.6; }
+  .lscore-corner-bl { position: absolute; bottom: 12px; left: 12px; width: 12px; height: 12px; border-bottom: 1px solid var(--orange-ember); border-left: 1px solid var(--orange-ember); opacity: 0.6; }
+
+  .lscore-meta { display: flex; gap: 28px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
+  .lscore-meta div { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
+  .lscore-meta span { color: var(--orange-ember); }
+
+  .qscreen { display: none; }
+  .qscreen.active { display: block; animation: fadeUp .35s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  .qprogress { display: flex; align-items: center; gap: 16px; margin-bottom: 26px; }
+  .qprogress-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange-ember); white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+  .qprogress-label::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--orange-ember); }
+  .qprogress-bar { flex: 1; height: 2px; background: var(--border-subtle); position: relative; }
+  .qprogress-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--red-primary); transition: width .3s ease; }
+
+  .q-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 4vw, 42px); text-transform: uppercase; line-height: 0.98; margin-bottom: 10px; }
+  .q-hint { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 0.04em; margin-bottom: 26px; line-height: 1.7; }
+
+  .qopts { display: grid; gap: 10px; }
+  .qopt { background: rgba(255,255,255,0.025); border: 1px solid var(--border-subtle); padding: 16px 18px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: all .18s ease; }
+  .qopt:hover { border-color: var(--orange-ember); transform: translateY(-1px); }
+  .qopt.selected { border-color: var(--red-primary); background: rgba(198,53,44,0.08); box-shadow: inset 3px 0 0 var(--red-primary); }
+  .qopt-key { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); border: 1px solid var(--border-subtle); padding: 3px 9px; flex-shrink: 0; }
+  .qopt.selected .qopt-key { color: var(--orange-ember); border-color: var(--orange-ember); }
+  .qopt-text { font-size: 15.5px; color: var(--text-primary); }
+  .qopt-sub { display: block; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+  .qrow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .ff { display: flex; flex-direction: column; gap: 7px; }
+  .ff label { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); }
+  .ff input { background: rgba(255,255,255,0.035); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 13px 15px; font-family: 'Space Grotesk', sans-serif; font-size: 16px; outline: none; transition: border-color 0.2s; }
+  .ff input:focus { border-color: var(--orange-ember); }
+
+  .qnav { margin-top: 28px; display: flex; align-items: center; }
+  .qskip { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-left: auto; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .qlegal { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 16px; line-height: 1.8; }
+
+  /* wynik */
+  .rstamp {
+    display: inline-block; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.08em;
+    padding: 8px 22px; transform: skewX(-8deg) rotate(-2deg); margin-bottom: 22px;
+    border: 2px solid; box-shadow: 3px 3px 0 var(--bg-section);
+  }
+  .rstamp span { display: inline-block; transform: skewX(8deg); }
+  .rscore { display: flex; gap: 36px; align-items: center; flex-wrap: wrap; margin-bottom: 28px; }
+  .ring { position: relative; width: 172px; height: 172px; flex-shrink: 0; margin: 0 auto; }
+  .ring svg { transform: rotate(-90deg); }
+  .ring-num { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .ring-num .n { font-family: 'Bebas Neue', sans-serif; font-size: 58px; line-height: 1; }
+  .ring-num .l { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+  .verdict { flex: 1; min-width: 230px; }
+  .verdict p { color: var(--text-secondary); font-size: 15.5px; line-height: 1.65; }
+
+  .rmetrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .rmetric { position: relative; background: rgba(255,255,255,0.025); border: 1px solid var(--border-subtle); padding: 18px 16px; overflow: hidden; }
+  .rmetric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red-primary); }
+  .rmetric:nth-child(even)::before { background: var(--orange-ember); }
+  .rmetric .ml { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .rmetric .mv { font-family: 'Bebas Neue', sans-serif; font-size: 36px; line-height: 1; }
+  .rmetric .mn { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 7px; line-height: 1.5; }
+  .good { color: var(--success); } .warn { color: var(--orange-ember); } .bad { color: var(--red-primary); }
+
+  .rdisclaimer { font-family: 'DM Mono', monospace; font-size: 10.5px; line-height: 1.8; color: var(--text-muted); border-left: 2px solid var(--border-subtle); padding-left: 14px; margin-bottom: 28px; }
+  .rseq-title { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange-ember); margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px; }
+  .rseq-title::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--orange-ember); }
+  .rseq { display: grid; gap: 8px; margin-bottom: 28px; }
+  .rseq-item { display: flex; gap: 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); padding: 12px 16px; align-items: baseline; }
+  .rseq-day { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--red-primary); letter-spacing: 0.1em; width: 58px; flex-shrink: 0; font-weight: 500; }
+  .rseq-what { font-size: 14.5px; color: var(--text-secondary); }
+  .rcta { background: rgba(235,92,28,0.07); border: 1px solid rgba(235,92,28,0.25); padding: 28px; text-align: center; }
+  .rcta h4 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; text-transform: uppercase; margin-bottom: 8px; }
+  .rcta p { color: var(--text-muted); font-size: 14px; margin-bottom: 18px; }
+
+  @media (max-width: 700px) {
+    .problem-grid { grid-template-columns: 1fr; }
+    .qrow, .rmetrics { grid-template-columns: 1fr; }
+    .lscore-box { padding: 32px 22px; }
+    .nav-links { display: none; }
+    .nav-brand .logo-tp { height: 44px; }
+    .nav-brand .logo-sswb { height: 32px; }
+  }
+</style>
+</head>
+<body>
+<div class="mockup-banner">Makieta osadzenia · extreme-sswb.pl · zielone ramki = adnotacje, nie wejdą na stronę</div>
+
+<!-- ════ NAV (istniejący + 1 nowy link) ════ -->
+<nav class="top-nav">
+  <div class="container nav-inner">
+    <a href="#" class="nav-brand">
+      <img src="img/trenuj-profesjonalnie-transparent.png" alt="Trenuj Profesjonalnie" class="logo-tp">
+      <span class="x">×</span>
+      <img src="img/sswb-logo.png" alt="SSWB" class="logo-sswb">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#metoda">Metoda</a></li>
+      <li><a href="#pakiety">Pakiet</a></li>
+      <li><a href="#gotowosc" style="color: var(--orange-ember)">▸ Test gotowości</a></li>
+      <li><a href="#rezerwacja">Rezerwacja</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ════ HERO (bez zmian — prawdziwe wideo strony) ════ -->
+<section class="hero">
+  <video class="hero-video-bg" autoplay muted loop playsinline>
+    <source src="img/hero-video.mp4" type="video/mp4">
+    <source src="img/hero-bg.mp4" type="video/mp4">
+  </video>
+  <div class="hero-video-overlay"></div>
+  <div class="container">
+    <div class="tag"><span>Oficjalny partner SSWB</span></div>
+    <h1>SELEKCJA <span class="accent">CZEKA.</span><br><span class="ember">PRZYGOTUJ SIĘ.</span></h1>
+    <p class="hero-sub">
+      Indywidualne plany treningowe i coaching 1:1 dla uczestników szkoleń SOFT / HARD / EXTREME.
+      Według metodologii operatorów sił specjalnych.
+    </p>
+    <div>
+      <a href="#rezerwacja" class="btn btn-primary">Zarezerwuj konsultację</a>
+      <a href="#metoda" class="btn btn-outline">Poznaj metodę</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PROBLEM (bez zmian) ════ -->
+<section class="warm">
+  <div class="container">
+    <div style="text-align: center;">
+      <h2>Wymagania warsztatów <span class="accent">rosną</span><br>z każdą edycją.</h2>
+      <p class="lead" style="margin: 0 auto; max-width: 760px;">Przygotowanie fizyczne to <strong style="color: var(--orange-ember);">pierwszy filtr</strong>. Charakter, motywacja, mentalność - to wszystko nie pomoże, jeśli ciało nie wytrzyma 4 dni intensywnego wysiłku.</p>
+    </div>
+    <div class="hud-divider" style="margin-left: auto; margin-right: auto;"><span>4 najczęstsze błędy w przygotowaniu</span></div>
+    <div class="problem-grid">
+      <div class="problem-card" style="text-align: center;"><div class="num" style="margin: 0 auto 16px;">01</div><h3>Losowe ćwiczenia</h3><p>Trening bez struktury, bez progresji. Wykonywanie przypadkowych ćwiczeń prowadzi do stagnacji po 4-6 tygodniach.</p></div>
+      <div class="problem-card" style="text-align: center;"><div class="num" style="margin: 0 auto 16px;">02</div><h3>Brak periodyzacji</h3><p>Trening cały rok na max intensywności = wypalenie w dniu warsztatów. Trzeba umieć zaplanować fazę wysokiej formy.</p></div>
+      <div class="problem-card" style="text-align: center;"><div class="num" style="margin: 0 auto 16px;">03</div><h3>Brak specyficzności</h3><p>Każdy sport jest inny. Wysiłek na selekcji wymaga specjalistycznego treningu — inne wzorce, inne obciążenia.</p></div>
+      <div class="problem-card" style="text-align: center;"><div class="num" style="margin: 0 auto 16px;">04</div><h3>Pomijanie regeneracji</h3><p>Odczyt tętna, HRV, sen, monitoring obciążenia. Bez analizowania ważnych zmiennych — ryzyko kontuzji zamiast szczytowej formy. Zdrowie to fundament.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<div class="annot"><span>▼ NOWA SEKCJA — TEST GOTOWOŚCI / LONGEVITY SCORE · proponowane miejsce: po sekcji problemowej, przed metodą ▼</span></div>
+<!-- ════════════════════════════════════════════ -->
+
+<section class="dark" id="gotowosc">
+  <div class="container">
+    <div style="text-align: center;">
+      <div class="tag ember"><span>Diagnostyka · 0 PLN · 2 minuty</span></div>
+      <h2>Czy Twoje ciało przejdzie<br><span class="accent">pierwszy filtr?</span></h2>
+      <p class="lead" style="margin: 0 auto; max-width: 720px;">
+        Odpowiedz na 6 pytań. W zamian: <strong style="color: var(--orange-ember);">Longevity Score</strong> —
+        szacowany VO2max, BMI i indeks regeneracji na tle normy dla Twojego wieku. Raport od razu na ekranie + PDF na maila.
+      </p>
+      <div class="lscore-meta">
+        <div><span>◆ 6 pytań</span> — bez konta</div>
+        <div><span>◆ Wynik</span> — natychmiast</div>
+        <div><span>◆ Raport PDF</span> — na maila</div>
+      </div>
+    </div>
+
+    <div class="lscore-box">
+      <span class="lscore-corner-bl"></span>
+
+      <!-- START -->
+      <div class="qscreen active" id="q-start">
+        <div class="qprogress-label" style="margin-bottom: 14px;">Ocena gotowości operacyjnej</div>
+        <div class="q-title">Sprawdź, na czym stoisz.</div>
+        <div class="q-hint">Selekcja nie pyta o samopoczucie. Pyta o liczby. Poznaj swoje — zanim poznają je warsztaty.</div>
+        <button class="btn btn-primary" onclick="go('q-1')">Rozpoczynam test ▸</button>
+      </div>
+
+      <!-- Q1 wiek + płeć -->
+      <div class="qscreen" id="q-1">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 01/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:16%"></div></div></div>
+        <div class="q-title">Ile masz lat?</div>
+        <div class="q-hint">Normy VO2max zależą od wieku i płci</div>
+        <div class="qrow">
+          <div class="ff"><label>Wiek</label><input type="number" id="age" placeholder="np. 42" value="42"></div>
+        </div>
+        <div class="qopts" style="margin-top:12px">
+          <div class="qopt selected" data-v="m" onclick="pick(this,'sex')"><span class="qopt-key">A</span><span class="qopt-text">Mężczyzna</span></div>
+          <div class="qopt" data-v="f" onclick="pick(this,'sex')"><span class="qopt-key">B</span><span class="qopt-text">Kobieta</span></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="go('q-2')">Dalej</button></div>
+      </div>
+
+      <!-- Q2 wzrost / waga -->
+      <div class="qscreen" id="q-2">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 02/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:33%"></div></div></div>
+        <div class="q-title">Wzrost i waga</div>
+        <div class="q-hint">Potrzebne do BMI — jednego z trzech filarów wyniku</div>
+        <div class="qrow">
+          <div class="ff"><label>Wzrost (cm)</label><input type="number" id="height" placeholder="np. 182" value="182"></div>
+          <div class="ff"><label>Waga (kg)</label><input type="number" id="weight" placeholder="np. 88" value="88"></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="go('q-3')">Dalej</button></div>
+      </div>
+
+      <!-- Q3 aktywność -->
+      <div class="qscreen" id="q-3">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 03/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:50%"></div></div></div>
+        <div class="q-title">Jak często trenujesz?</div>
+        <div class="q-hint">Liczy się ostatnie 30 dni, nie najlepszy miesiąc w życiu</div>
+        <div class="qopts">
+          <div class="qopt" data-v="0" onclick="pick(this,'activity')"><span class="qopt-key">A</span><span class="qopt-text">Praktycznie wcale<span class="qopt-sub">0–1 treningów / tydzień — praca zjada wszystko</span></span></div>
+          <div class="qopt" data-v="1" onclick="pick(this,'activity')"><span class="qopt-key">B</span><span class="qopt-text">Nieregularnie<span class="qopt-sub">1–2 lekkie treningi / tydzień</span></span></div>
+          <div class="qopt selected" data-v="2" onclick="pick(this,'activity')"><span class="qopt-key">C</span><span class="qopt-text">Regularnie<span class="qopt-sub">2–3 treningi, w tym intensywne</span></span></div>
+          <div class="qopt" data-v="3" onclick="pick(this,'activity')"><span class="qopt-key">D</span><span class="qopt-text">Często i intensywnie<span class="qopt-sub">4+ treningów / tydzień</span></span></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="go('q-4')">Dalej</button></div>
+      </div>
+
+      <!-- Q4 tętno -->
+      <div class="qscreen" id="q-4">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 04/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:66%"></div></div></div>
+        <div class="q-title">Tętno spoczynkowe?</div>
+        <div class="q-hint">Z zegarka lub opaski. Nie znasz? Pomiń — użyjemy średniej dla Twojego profilu</div>
+        <div class="qrow">
+          <div class="ff"><label>Tętno (ud./min)</label><input type="number" id="rhr" placeholder="np. 62"></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="go('q-5')">Dalej</button><span class="qskip" onclick="go('q-5')">nie znam → pomiń</span></div>
+      </div>
+
+      <!-- Q5 cel -->
+      <div class="qscreen" id="q-5">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 05/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:83%"></div></div></div>
+        <div class="q-title">Twój główny cel?</div>
+        <div class="q-hint">Personalizuje raport i plan działań w mailach</div>
+        <div class="qopts">
+          <div class="qopt" data-v="selekcja" onclick="pick(this,'goal')"><span class="qopt-key">A</span><span class="qopt-text">Przejść selekcję SSWB<span class="qopt-sub">SOFT / HARD / EXTREME</span></span></div>
+          <div class="qopt selected" data-v="longevity" onclick="pick(this,'goal')"><span class="qopt-key">B</span><span class="qopt-text">Zdrowie i longevity<span class="qopt-sub">sprawność na dekady, nie na sezon</span></span></div>
+          <div class="qopt" data-v="forma" onclick="pick(this,'goal')"><span class="qopt-key">C</span><span class="qopt-text">Forma po 40-tce<span class="qopt-sub">siła, sylwetka, testosteron</span></span></div>
+          <div class="qopt" data-v="energia" onclick="pick(this,'goal')"><span class="qopt-key">D</span><span class="qopt-text">Energia do prowadzenia biznesu<span class="qopt-sub">głowa działa tak, jak ciało pozwala</span></span></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="go('q-6')">Dalej</button></div>
+      </div>
+
+      <!-- Q6 dolegliwości -->
+      <div class="qscreen" id="q-6">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 06/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:100%"></div></div></div>
+        <div class="q-title">Co Ci najbardziej doskwiera?</div>
+        <div class="q-hint">Szczera odpowiedź = trafniejszy raport</div>
+        <div class="qopts">
+          <div class="qopt selected" data-v="none" onclick="pick(this,'issue')"><span class="qopt-key">A</span><span class="qopt-text">Nic szczególnego — chcę optymalizować</span></div>
+          <div class="qopt" data-v="fatigue" onclick="pick(this,'issue')"><span class="qopt-key">B</span><span class="qopt-text">Zmęczenie, słaby sen, brak regeneracji</span></div>
+          <div class="qopt" data-v="pain" onclick="pick(this,'issue')"><span class="qopt-key">C</span><span class="qopt-text">Bóle pleców / kolan / stawów</span></div>
+          <div class="qopt" data-v="stress" onclick="pick(this,'issue')"><span class="qopt-key">D</span><span class="qopt-text">Stres i napięcie — praca zjada zdrowie</span></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="go('q-email')">Pokaż wynik</button></div>
+      </div>
+
+      <!-- EMAIL GATE -->
+      <div class="qscreen" id="q-email">
+        <div class="qprogress-label" style="margin-bottom: 14px;">Wynik gotowy</div>
+        <div class="q-title">Gdzie wysłać raport?</div>
+        <div class="q-hint">Wynik zobaczysz od razu na ekranie. Pełny raport PDF + plan 5 dni trafi na maila.</div>
+        <div class="qrow">
+          <div class="ff"><label>Imię</label><input type="text" id="uname" placeholder="np. Tomasz" value="Tomasz"></div>
+          <div class="ff"><label>E-mail</label><input type="email" id="email" placeholder="twoj@email.pl"></div>
+        </div>
+        <div class="qnav"><button class="btn btn-ember" onclick="showResult()">Odbieram raport ▸</button></div>
+        <p class="qlegal">Zapisując się akceptujesz politykę prywatności. 5 maili z konkretami — wypisujesz się jednym kliknięciem.</p>
+      </div>
+
+      <!-- WYNIK -->
+      <div class="qscreen" id="q-result">
+        <div class="rstamp" id="r-stamp"><span id="r-stamp-text">—</span></div>
+        <div class="q-title"><span id="r-name">Tomasz</span>, oto Twoja ocena</div>
+        <div class="q-hint">Kopia raportu właśnie leci na Twojego maila</div>
+
+        <div class="rscore">
+          <div class="ring">
+            <svg width="172" height="172">
+              <circle cx="86" cy="86" r="76" stroke="#2A201C" stroke-width="9" fill="none"/>
+              <circle id="ring-fill" cx="86" cy="86" r="76" stroke="#EB5C1C" stroke-width="9" fill="none"
+                      stroke-linecap="round" stroke-dasharray="477" stroke-dashoffset="477" style="transition: stroke-dashoffset 1.2s ease"/>
+            </svg>
+            <div class="ring-num"><span class="n" id="score-n" style="color: var(--orange-ember)">—</span><span class="l">Longevity Score</span></div>
+          </div>
+          <div class="verdict"><p id="verdict-p">—</p></div>
+        </div>
+
+        <div class="rmetrics">
+          <div class="rmetric"><div class="ml">Szac. VO2max</div><div class="mv" id="m-vo2">—</div><div class="mn" id="m-vo2-norm">—</div></div>
+          <div class="rmetric"><div class="ml">BMI</div><div class="mv" id="m-bmi">—</div><div class="mn">norma: 18.5–24.9</div></div>
+          <div class="rmetric"><div class="ml">Indeks regeneracji</div><div class="mv" id="m-rec">—</div><div class="mn">tętno + styl życia</div></div>
+        </div>
+
+        <div class="rdisclaimer">
+          * Wynik jest estymacją na podstawie ankiety (model Jurca i wsp.) — nie zastępuje badania wydolnościowego.
+          Dokładny pomiar wykonasz w ramach Pakietu Zdrowia (25-30 parametrów).
+        </div>
+
+        <div class="rseq-title">Przez 5 dni dostaniesz kompletny plan</div>
+        <div class="rseq">
+          <div class="rseq-item"><span class="rseq-day">DZIŚ</span><span class="rseq-what">Pełny raport PDF + Twój wynik na tle normy wiekowej</span></div>
+          <div class="rseq-item"><span class="rseq-day">DZIEŃ 2</span><span class="rseq-what">Case study: jak Dariusz przygotował się do zwycięstwa w edycji SSWB</span></div>
+          <div class="rseq-item"><span class="rseq-day">DZIEŃ 3</span><span class="rseq-what">3 ćwiczenia selekcyjne do zrobienia w domu — bez sprzętu</span></div>
+          <div class="rseq-item"><span class="rseq-day">DZIEŃ 4</span><span class="rseq-what">Pakiet Zdrowia + konsultacja — oferta ważna 48h</span></div>
+          <div class="rseq-item"><span class="rseq-day">DZIEŃ 5</span><span class="rseq-what">FAQ + historie uczestników warsztatów</span></div>
+        </div>
+
+        <div class="rcta">
+          <h4>Nie chcesz czekać 5 dni?</h4>
+          <p>Pierwsza konsultacja gratis — sprawdzamy, czy pasujemy do siebie.</p>
+          <a href="https://calendly.com/trening-kamilorawczak/30min" target="_blank" rel="noopener" class="btn btn-ember">Zarezerwuj konsultację</a>
+        </div>
+      </div>
+
+    </div><!-- /lscore-box -->
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<div class="annot"><span>▲ KONIEC NOWEJ SEKCJI — dalej strona bez zmian ▲</span></div>
+<!-- ════════════════════════════════════════════ -->
+
+<!-- ════ METODA (istniejąca — skrót) ════ -->
+<section id="metoda" class="dark condensed">
+  <div class="container" style="text-align: center;">
+    <div class="tag"><span>Metodologia</span></div>
+    <h2>To nie cudowny plan.<br><span class="accent">To metodologia działania</span><br>operatorów w trudnych warunkach.</h2>
+    <div class="condensed-note">[ istniejąca sekcja metody — bez zmian: 4 zasady + 3 systemy energetyczne ]</div>
+  </div>
+</section>
+
+<!-- ════ PAKIETY (istniejąca — skrót) ════ -->
+<section id="pakiety" class="condensed">
+  <div class="container" style="text-align: center;">
+    <div class="tag"><span>Pakiet</span></div>
+    <h2>Pełne przygotowanie<br><span class="accent">do edycji EXTREME.</span></h2>
+    <div style="max-width: 380px; margin: 30px auto 0; background: var(--bg-card); border-top: 6px solid var(--orange-ember); padding: 32px;">
+      <div style="font-family: 'Bebas Neue', sans-serif; font-size: 42px;">EXTREME</div>
+      <div style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em;">16 tygodni / 4 miesiące</div>
+      <div style="font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--orange-ember); margin-top: 16px;">550 <span style="font-size: 18px; color: var(--text-muted)">PLN/mc</span></div>
+    </div>
+    <div class="condensed-note">[ istniejąca sekcja pakietu — bez zmian ]</div>
+  </div>
+</section>
+
+<!-- ════ FAQ + REZERWACJA (istniejące — skrót) ════ -->
+<section id="faq" class="warm condensed">
+  <div class="container" style="text-align: center;">
+    <h2>FAQ</h2>
+    <div class="condensed-note">[ istniejąca sekcja FAQ — bez zmian ]</div>
+  </div>
+</section>
+<section id="rezerwacja" class="dark condensed">
+  <div class="container" style="text-align: center;">
+    <h2>Zarezerwuj <span class="ember">konsultację.</span></h2>
+    <div class="condensed-note">[ istniejąca sekcja rezerwacji — bez zmian ]</div>
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+<footer>
+  <div class="container" style="text-align: center;">
+    <p style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em;">© 2026 TRENUJ PROFESJONALNIE × SSWB · Kamil Orawczak</p>
+  </div>
+</footer>
+
+<script>
+  const state = { sex: 'm', activity: 2, goal: 'longevity', issue: 'none' };
+
+  function pick(el, key) {
+    el.parentElement.querySelectorAll('.qopt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    const v = el.dataset.v;
+    state[key] = isNaN(v) ? v : Number(v);
+  }
+
+  function go(id) {
+    document.querySelectorAll('.qscreen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('gotowosc').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showResult() {
+    const age = Number(document.getElementById('age').value) || 42;
+    const h = (Number(document.getElementById('height').value) || 180) / 100;
+    const w = Number(document.getElementById('weight').value) || 85;
+    const rhr = Number(document.getElementById('rhr').value) || (62 - state.activity * 3);
+    const name = document.getElementById('uname').value || 'Operatorze';
+
+    const bmi = w / (h * h);
+    // Estymacja VO2max — uproszczony model nieobciążeniowy (Jurca et al. 2005)
+    const sexF = state.sex === 'm' ? 2.77 : 0;
+    const actScore = [0, 1.5, 3.5, 5.5][state.activity];
+    const vo2 = 18.07 + sexF - 0.10 * age - 0.17 * bmi - 0.03 * rhr + actScore * 2.2;
+    const norm = (state.sex === 'm' ? 44 : 38) - (age - 30) * 0.35;
+
+    let rec = 100 - Math.max(0, rhr - 50) * 1.8;
+    if (state.issue === 'fatigue') rec -= 15;
+    if (state.issue === 'stress') rec -= 10;
+    rec = Math.round(Math.min(100, Math.max(20, rec)));
+
+    const vo2Pts = Math.min(100, Math.max(0, (vo2 / norm) * 75));
+    const bmiPts = bmi >= 18.5 && bmi <= 24.9 ? 100 : Math.max(0, 100 - Math.abs(bmi - 22) * 9);
+    const score = Math.round(vo2Pts * 0.5 + bmiPts * 0.25 + rec * 0.25);
+
+    document.getElementById('r-name').textContent = name;
+    document.getElementById('score-n').textContent = score;
+    document.getElementById('m-vo2').textContent = vo2.toFixed(1);
+    document.getElementById('m-vo2').className = 'mv ' + (vo2 >= norm ? 'good' : vo2 >= norm * 0.85 ? 'warn' : 'bad');
+    document.getElementById('m-vo2-norm').textContent = `norma dla wieku: ~${norm.toFixed(0)} ml/kg/min`;
+    document.getElementById('m-bmi').textContent = bmi.toFixed(1);
+    document.getElementById('m-bmi').className = 'mv ' + (bmi >= 18.5 && bmi <= 24.9 ? 'good' : 'warn');
+    document.getElementById('m-rec').textContent = rec;
+    document.getElementById('m-rec').className = 'mv ' + (rec >= 75 ? 'good' : rec >= 55 ? 'warn' : 'bad');
+
+    // Werdykt w stylu kwalifikacji selekcyjnej
+    const verdicts = [
+      [80, 'ZDOLNY', 'var(--success)', 'Twoja baza jest powyżej przeciętnej. Teraz gra toczy się o optymalizację — wyciśnięcie pełni potencjału i utrzymanie go przez dekady. Na selekcji liczyć się będzie każdy procent.'],
+      [60, 'ZDOLNY WARUNKOWO', 'var(--orange-ember)', 'Jesteś w okolicach normy — to dobra wiadomość. Zła: norma to przeciętność, a warsztaty eliminują przeciętnych. Masz wyraźną rezerwę do zbudowania.'],
+      [40, 'WYMAGA PRZYGOTOWANIA', 'var(--red-primary)', 'Wynik poniżej normy dla wieku. Da się to odwrócić — VO2max reaguje na trening szybciej niż myślisz, ale potrzebujesz struktury, nie przypadkowych treningów.'],
+      [0,  'ODBUDOWA BAZY', 'var(--red-primary)', 'Wynik wymaga działania teraz. Dobra wiadomość: z tego poziomu pierwsze 8 tygodni daje największe przyrosty. Zacznij od fundamentów.']
+    ];
+    const v = verdicts.find(x => score >= x[0]);
+    document.getElementById('r-stamp-text').textContent = v[1];
+    const stamp = document.getElementById('r-stamp');
+    stamp.style.color = v[2];
+    stamp.style.borderColor = v[2];
+    document.getElementById('verdict-p').textContent = v[3];
+    document.getElementById('score-n').style.color = v[2];
+    document.getElementById('ring-fill').style.stroke = v[2] === 'var(--success)' ? '#4ADE80' : v[2] === 'var(--orange-ember)' ? '#EB5C1C' : '#C6352C';
+
+    go('q-result');
+    setTimeout(() => {
+      document.getElementById('ring-fill').style.strokeDashoffset = 477 - (477 * score / 100);
+    }, 150);
+  }
+</script>
+</body>
+</html>

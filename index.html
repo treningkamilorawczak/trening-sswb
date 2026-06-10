@@ -2337,6 +2337,91 @@
     .floating-cta .fc-main { font-size: 12px; }
     .floating-cta .fc-sub { font-size: 9px; }
   }
+
+  /* === LONGEVITY SCORE QUIZ (#gotowosc) === */
+  .lscore-box {
+    position: relative; max-width: 720px; margin: 48px auto 0;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+    border: 1px solid var(--border-subtle); padding: 44px 40px;
+  }
+  .lscore-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red-primary); }
+  .lscore-box::after { content: ''; position: absolute; top: 12px; right: 12px; width: 12px; height: 12px; border-top: 1px solid var(--orange-ember); border-right: 1px solid var(--orange-ember); opacity: 0.6; }
+  .lscore-corner-bl { position: absolute; bottom: 12px; left: 12px; width: 12px; height: 12px; border-bottom: 1px solid var(--orange-ember); border-left: 1px solid var(--orange-ember); opacity: 0.6; }
+
+  .lscore-meta { display: flex; gap: 28px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
+  .lscore-meta div { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
+  .lscore-meta span { color: var(--orange-ember); }
+
+  .qscreen { display: none; }
+  .qscreen.active { display: block; animation: fadeUp .35s ease both; }
+
+  .qprogress { display: flex; align-items: center; gap: 16px; margin-bottom: 26px; }
+  .qprogress-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange-ember); white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+  .qprogress-label::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--orange-ember); }
+  .qprogress-bar { flex: 1; height: 2px; background: var(--border-subtle); position: relative; }
+  .qprogress-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--red-primary); transition: width .3s ease; }
+
+  .q-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 4vw, 42px); text-transform: uppercase; line-height: 0.98; margin-bottom: 10px; color: var(--text-primary); }
+  .q-hint { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 0.04em; margin-bottom: 26px; line-height: 1.7; }
+
+  .qopts { display: grid; gap: 10px; }
+  .qopt { background: rgba(255,255,255,0.025); border: 1px solid var(--border-subtle); padding: 16px 18px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: all .18s ease; }
+  .qopt:hover { border-color: var(--orange-ember); transform: translateY(-1px); }
+  .qopt.selected { border-color: var(--red-primary); background: rgba(198,53,44,0.08); box-shadow: inset 3px 0 0 var(--red-primary); }
+  .qopt-key { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); border: 1px solid var(--border-subtle); padding: 3px 9px; flex-shrink: 0; }
+  .qopt.selected .qopt-key { color: var(--orange-ember); border-color: var(--orange-ember); }
+  .qopt-text { font-size: 15.5px; color: var(--text-primary); }
+  .qopt-sub { display: block; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+  .qrow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .qfield { display: flex; flex-direction: column; gap: 7px; }
+  .qfield label { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); }
+  .qfield input { background: rgba(255,255,255,0.035); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 13px 15px; font-family: 'Space Grotesk', sans-serif; font-size: 16px; outline: none; transition: border-color 0.2s; }
+  .qfield input:focus { border-color: var(--orange-ember); }
+
+  .qnav { margin-top: 28px; display: flex; align-items: center; }
+  .qskip { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); margin-left: auto; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .qlegal { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 16px; line-height: 1.8; }
+
+  .rstamp {
+    display: inline-block; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.08em;
+    padding: 8px 22px; transform: skewX(-8deg) rotate(-2deg); margin-bottom: 22px;
+    border: 2px solid; box-shadow: 3px 3px 0 var(--bg-section);
+  }
+  .rstamp span { display: inline-block; transform: skewX(8deg); }
+  .rscore { display: flex; gap: 36px; align-items: center; flex-wrap: wrap; margin-bottom: 28px; }
+  .lsring { position: relative; width: 172px; height: 172px; flex-shrink: 0; margin: 0 auto; }
+  .lsring svg { transform: rotate(-90deg); }
+  .lsring-num { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .lsring-num .n { font-family: 'Bebas Neue', sans-serif; font-size: 58px; line-height: 1; }
+  .lsring-num .l { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+  .lsverdict { flex: 1; min-width: 230px; }
+  .lsverdict p { color: var(--text-secondary); font-size: 15.5px; line-height: 1.65; }
+
+  .rmetrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .rmetric { position: relative; background: rgba(255,255,255,0.025); border: 1px solid var(--border-subtle); padding: 18px 16px; overflow: hidden; }
+  .rmetric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red-primary); }
+  .rmetric:nth-child(even)::before { background: var(--orange-ember); }
+  .rmetric .ml { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .rmetric .mv { font-family: 'Bebas Neue', sans-serif; font-size: 36px; line-height: 1; }
+  .rmetric .mn { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 7px; line-height: 1.5; }
+  .mv.good { color: var(--success); } .mv.warn { color: var(--orange-ember); } .mv.bad { color: var(--red-primary); }
+
+  .rdisclaimer { font-family: 'DM Mono', monospace; font-size: 10.5px; line-height: 1.8; color: var(--text-muted); border-left: 2px solid var(--border-subtle); padding-left: 14px; margin-bottom: 28px; }
+  .rseq-title { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange-ember); margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px; }
+  .rseq-title::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--orange-ember); }
+  .rseq { display: grid; gap: 8px; margin-bottom: 28px; }
+  .rseq-item { display: flex; gap: 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); padding: 12px 16px; align-items: baseline; }
+  .rseq-day { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--red-primary); letter-spacing: 0.1em; width: 58px; flex-shrink: 0; font-weight: 500; }
+  .rseq-what { font-size: 14.5px; color: var(--text-secondary); }
+  .rcta { background: rgba(235,92,28,0.07); border: 1px solid rgba(235,92,28,0.25); padding: 28px; text-align: center; }
+  .rcta h4 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; text-transform: uppercase; margin-bottom: 8px; color: var(--text-primary); }
+  .rcta p { color: var(--text-muted); font-size: 14px; margin-bottom: 18px; }
+
+  @media (max-width: 700px) {
+    .lscore-box { padding: 32px 22px; }
+    .qrow, .rmetrics { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -2439,6 +2524,7 @@ window.addEventListener('scroll', function() {
         <img src="img/sswb-logo.png" alt="Siły Specjalne w Biznesie" class="logo-sswb">
       </a>
       <ul class="nav-links">
+        <li><a href="#gotowosc" style="color: var(--orange-ember);">▸ Test gotowości</a></li>
         <li><a href="#metoda">Metoda</a></li>
         <li><a href="#proces">Proces</a></li>
         <li><a href="#pakiety">Pakiety</a></li>
@@ -2511,6 +2597,185 @@ window.addEventListener('scroll', function() {
         <p>Odczyt tętna, HRV, sen, monitoring obciążenia. Bez analizowania ważnych zmiennych — ryzyko kontuzji zamiast szczytowej formy. Zdrowie to fundament.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SEKCJA 02B: LONGEVITY SCORE / TEST GOTOWOŚCI
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="dark" id="gotowosc">
+  <div class="container">
+    <div class="section-header" style="text-align: center;">
+      <div class="tag ember"><span>Diagnostyka · 0 PLN · 2 minuty</span></div>
+      <h2>Czy Twoje ciało przejdzie<br><span class="accent">pierwszy filtr?</span></h2>
+      <p class="lead" style="margin: 0 auto; max-width: 720px;">
+        Odpowiedz na 6 pytań. W zamian: <strong style="color: var(--orange-ember);">Longevity Score</strong> —
+        szacowany VO2max, BMI i indeks regeneracji na tle normy dla Twojego wieku. Raport od razu na ekranie + pełny raport na maila.
+      </p>
+      <div class="lscore-meta">
+        <div><span>◆ 6 pytań</span> — bez konta</div>
+        <div><span>◆ Wynik</span> — natychmiast</div>
+        <div><span>◆ Pełny raport</span> — na maila</div>
+      </div>
+    </div>
+
+    <div class="lscore-box">
+      <span class="lscore-corner-bl"></span>
+
+      <!-- START -->
+      <div class="qscreen active" id="q-start">
+        <div class="qprogress-label" style="margin-bottom: 14px;">Ocena gotowości operacyjnej</div>
+        <div class="q-title">Sprawdź, na czym stoisz.</div>
+        <div class="q-hint">Selekcja nie pyta o samopoczucie. Pyta o liczby. Poznaj swoje — zanim poznają je warsztaty.</div>
+        <button class="btn btn-primary" onclick="lsGo('q-1')">Rozpoczynam test ▸</button>
+      </div>
+
+      <!-- Q1 wiek + płeć -->
+      <div class="qscreen" id="q-1">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 01/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:16%"></div></div></div>
+        <div class="q-title">Ile masz lat?</div>
+        <div class="q-hint">Normy VO2max zależą od wieku i płci</div>
+        <div class="qrow">
+          <div class="qfield"><label for="ls-age">Wiek</label><input type="number" id="ls-age" min="16" max="99" placeholder="np. 42"></div>
+        </div>
+        <div class="qopts" style="margin-top:12px">
+          <div class="qopt" data-v="m" onclick="lsPick(this,'sex')"><span class="qopt-key">A</span><span class="qopt-text">Mężczyzna</span></div>
+          <div class="qopt" data-v="f" onclick="lsPick(this,'sex')"><span class="qopt-key">B</span><span class="qopt-text">Kobieta</span></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="lsGo('q-2')">Dalej</button></div>
+      </div>
+
+      <!-- Q2 wzrost / waga -->
+      <div class="qscreen" id="q-2">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 02/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:33%"></div></div></div>
+        <div class="q-title">Wzrost i waga</div>
+        <div class="q-hint">Potrzebne do BMI — jednego z trzech filarów wyniku</div>
+        <div class="qrow">
+          <div class="qfield"><label for="ls-height">Wzrost (cm)</label><input type="number" id="ls-height" min="120" max="230" placeholder="np. 182"></div>
+          <div class="qfield"><label for="ls-weight">Waga (kg)</label><input type="number" id="ls-weight" min="35" max="250" placeholder="np. 88"></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="lsGo('q-3')">Dalej</button></div>
+      </div>
+
+      <!-- Q3 aktywność -->
+      <div class="qscreen" id="q-3">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 03/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:50%"></div></div></div>
+        <div class="q-title">Jak często trenujesz?</div>
+        <div class="q-hint">Liczy się ostatnie 30 dni, nie najlepszy miesiąc w życiu</div>
+        <div class="qopts">
+          <div class="qopt" data-v="0" onclick="lsPick(this,'activity')"><span class="qopt-key">A</span><span class="qopt-text">Praktycznie wcale<span class="qopt-sub">0–1 treningów / tydzień — praca zjada wszystko</span></span></div>
+          <div class="qopt" data-v="1" onclick="lsPick(this,'activity')"><span class="qopt-key">B</span><span class="qopt-text">Nieregularnie<span class="qopt-sub">1–2 lekkie treningi / tydzień</span></span></div>
+          <div class="qopt" data-v="2" onclick="lsPick(this,'activity')"><span class="qopt-key">C</span><span class="qopt-text">Regularnie<span class="qopt-sub">2–3 treningi, w tym intensywne</span></span></div>
+          <div class="qopt" data-v="3" onclick="lsPick(this,'activity')"><span class="qopt-key">D</span><span class="qopt-text">Często i intensywnie<span class="qopt-sub">4+ treningów / tydzień</span></span></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="lsGo('q-4')">Dalej</button></div>
+      </div>
+
+      <!-- Q4 tętno -->
+      <div class="qscreen" id="q-4">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 04/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:66%"></div></div></div>
+        <div class="q-title">Tętno spoczynkowe?</div>
+        <div class="q-hint">Z zegarka lub opaski. Nie znasz? Pomiń — użyjemy średniej dla Twojego profilu</div>
+        <div class="qrow">
+          <div class="qfield"><label for="ls-rhr">Tętno (ud./min)</label><input type="number" id="ls-rhr" min="30" max="120" placeholder="np. 62"></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="lsGo('q-5')">Dalej</button><span class="qskip" onclick="lsGo('q-5')">nie znam → pomiń</span></div>
+      </div>
+
+      <!-- Q5 cel -->
+      <div class="qscreen" id="q-5">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 05/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:83%"></div></div></div>
+        <div class="q-title">Twój główny cel?</div>
+        <div class="q-hint">Personalizuje raport i plan działań w mailach</div>
+        <div class="qopts">
+          <div class="qopt" data-v="selekcja" onclick="lsPick(this,'goal')"><span class="qopt-key">A</span><span class="qopt-text">Przejść selekcję SSWB<span class="qopt-sub">SOFT / HARD / EXTREME</span></span></div>
+          <div class="qopt" data-v="longevity" onclick="lsPick(this,'goal')"><span class="qopt-key">B</span><span class="qopt-text">Zdrowie i longevity<span class="qopt-sub">sprawność na dekady, nie na sezon</span></span></div>
+          <div class="qopt" data-v="forma" onclick="lsPick(this,'goal')"><span class="qopt-key">C</span><span class="qopt-text">Forma po 40-tce<span class="qopt-sub">siła, sylwetka, energia</span></span></div>
+          <div class="qopt" data-v="energia" onclick="lsPick(this,'goal')"><span class="qopt-key">D</span><span class="qopt-text">Energia do prowadzenia biznesu<span class="qopt-sub">głowa działa tak, jak ciało pozwala</span></span></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="lsGo('q-6')">Dalej</button></div>
+      </div>
+
+      <!-- Q6 dolegliwości -->
+      <div class="qscreen" id="q-6">
+        <div class="qprogress"><span class="qprogress-label">Pytanie 06/06</span><div class="qprogress-bar"><div class="qprogress-fill" style="width:100%"></div></div></div>
+        <div class="q-title">Co Ci najbardziej doskwiera?</div>
+        <div class="q-hint">Szczera odpowiedź = trafniejszy raport</div>
+        <div class="qopts">
+          <div class="qopt" data-v="none" onclick="lsPick(this,'issue')"><span class="qopt-key">A</span><span class="qopt-text">Nic szczególnego — chcę optymalizować</span></div>
+          <div class="qopt" data-v="fatigue" onclick="lsPick(this,'issue')"><span class="qopt-key">B</span><span class="qopt-text">Zmęczenie, słaby sen, brak regeneracji</span></div>
+          <div class="qopt" data-v="pain" onclick="lsPick(this,'issue')"><span class="qopt-key">C</span><span class="qopt-text">Bóle pleców / kolan / stawów</span></div>
+          <div class="qopt" data-v="stress" onclick="lsPick(this,'issue')"><span class="qopt-key">D</span><span class="qopt-text">Stres i napięcie — praca zjada zdrowie</span></div>
+        </div>
+        <div class="qnav"><button class="btn btn-primary" onclick="lsGo('q-email')">Pokaż wynik</button></div>
+      </div>
+
+      <!-- EMAIL GATE -->
+      <div class="qscreen" id="q-email">
+        <div class="qprogress-label" style="margin-bottom: 14px;">Wynik gotowy</div>
+        <div class="q-title">Gdzie wysłać raport?</div>
+        <div class="q-hint">Wynik zobaczysz od razu na ekranie. Pełny raport + plan 5 dni trafi na maila.</div>
+        <div class="qrow">
+          <div class="qfield"><label for="ls-name">Imię</label><input type="text" id="ls-name" maxlength="60" placeholder="np. Tomasz"></div>
+          <div class="qfield"><label for="ls-email">E-mail</label><input type="email" id="ls-email" placeholder="twoj@email.pl"></div>
+        </div>
+        <div class="qnav"><button class="btn btn-ember" onclick="lsSubmit()">Odbieram raport ▸</button></div>
+        <label class="qlegal" style="display: flex; gap: 10px; align-items: flex-start; cursor: pointer;">
+          <input type="checkbox" id="ls-consent" style="margin-top: 2px; accent-color: var(--orange-ember);">
+          <span>Chcę otrzymać raport i serię 5 maili z planem. Akceptuję
+          <a href="polityka-prywatnosci.html" target="_blank" style="color: var(--orange-ember);">politykę prywatności</a>.
+          Wypisuję się jednym kliknięciem.</span>
+        </label>
+        <p class="qlegal" id="ls-consent-error" style="display: none; color: var(--red-primary);">Zaznacz zgodę, żeby otrzymać raport.</p>
+      </div>
+
+      <!-- WYNIK -->
+      <div class="qscreen" id="q-result">
+        <div class="rstamp" id="r-stamp"><span id="r-stamp-text">—</span></div>
+        <div class="q-title"><span id="r-name">—</span>, oto Twoja ocena</div>
+        <div class="q-hint">Kopia raportu właśnie leci na Twojego maila</div>
+
+        <div class="rscore">
+          <div class="lsring">
+            <svg width="172" height="172">
+              <circle cx="86" cy="86" r="76" stroke="#2A201C" stroke-width="9" fill="none"/>
+              <circle id="ls-ring-fill" cx="86" cy="86" r="76" stroke="#EB5C1C" stroke-width="9" fill="none"
+                      stroke-linecap="round" stroke-dasharray="477" stroke-dashoffset="477" style="transition: stroke-dashoffset 1.2s ease"/>
+            </svg>
+            <div class="lsring-num"><span class="n" id="ls-score-n">—</span><span class="l">Longevity Score</span></div>
+          </div>
+          <div class="lsverdict"><p id="ls-verdict-p">—</p></div>
+        </div>
+
+        <div class="rmetrics">
+          <div class="rmetric"><div class="ml">Szac. VO2max</div><div class="mv" id="ls-m-vo2">—</div><div class="mn" id="ls-m-vo2-norm">—</div></div>
+          <div class="rmetric"><div class="ml">BMI</div><div class="mv" id="ls-m-bmi">—</div><div class="mn">norma: 18.5–24.9</div></div>
+          <div class="rmetric"><div class="ml">Indeks regeneracji</div><div class="mv" id="ls-m-rec">—</div><div class="mn">tętno + styl życia</div></div>
+        </div>
+
+        <div class="rdisclaimer">
+          * Wynik jest estymacją na podstawie ankiety (model Jurca i wsp. 2005) — nie zastępuje badania wydolnościowego
+          ani diagnozy medycznej. Dokładny pomiar wykonasz w ramach Pakietu Zdrowia (25-30 parametrów).
+        </div>
+
+        <div class="rseq-title">Przez 5 dni dostaniesz kompletny plan</div>
+        <div class="rseq">
+          <div class="rseq-item"><span class="rseq-day">DZIŚ</span><span class="rseq-what">Pełny raport + Twój wynik na tle normy wiekowej</span></div>
+          <div class="rseq-item"><span class="rseq-day">DZIEŃ 2</span><span class="rseq-what">Case study: jak Dariusz przygotował się do zwycięstwa w edycji SSWB</span></div>
+          <div class="rseq-item"><span class="rseq-day">DZIEŃ 3</span><span class="rseq-what">3 ćwiczenia selekcyjne do zrobienia w domu — bez sprzętu</span></div>
+          <div class="rseq-item"><span class="rseq-day">DZIEŃ 4</span><span class="rseq-what">Pakiet Zdrowia + konsultacja — konkretna propozycja</span></div>
+          <div class="rseq-item"><span class="rseq-day">DZIEŃ 5</span><span class="rseq-what">FAQ + historie uczestników warsztatów</span></div>
+        </div>
+
+        <div class="rcta">
+          <h4>Nie chcesz czekać 5 dni?</h4>
+          <p>Pierwsza konsultacja gratis — sprawdzamy, czy pasujemy do siebie.</p>
+          <a href="https://calendly.com/trening-kamilorawczak/30min" target="_blank" rel="noopener"
+             class="btn btn-ember" onclick="window.dataLayer?.push({event:'ls_calendly'})">Zarezerwuj konsultację</a>
+        </div>
+      </div>
+
+    </div><!-- /lscore-box -->
   </div>
 </section>
 

@@ -3476,5 +3476,122 @@ window.addEventListener('scroll', function() {
   </div>
 </footer>
 
+<!-- ═══ LONGEVITY SCORE QUIZ — logika ═══ -->
+<script type="module">
+  import { computeResult } from './js/longevity-score.js';
+
+  const track = (event) => { window.dataLayer?.push({ event: `ls_${event}` }); };
+
+  const state = { sex: null, activity: null, goal: null, issue: null };
+
+  window.lsPick = (el, key) => {
+    el.parentElement.querySelectorAll('.qopt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    const v = el.dataset.v;
+    state[key] = isNaN(v) ? v : Number(v);
+  };
+
+  const num = (id) => Number(document.getElementById(id).value);
+
+  window.lsGo = (id) => {
+    // walidacja ekranu, z którego wychodzimy
+    const validators = {
+      'q-2': () => num('ls-age') >= 16 && num('ls-age') <= 99 && state.sex,
+      'q-3': () => num('ls-height') >= 120 && num('ls-weight') >= 35,
+      'q-4': () => state.activity !== null,
+      'q-5': () => true, // tętno opcjonalne
+      'q-6': () => state.goal !== null,
+      'q-email': () => state.issue !== null,
+    };
+    if (validators[id] && !validators[id]()) return;
+    if (id === 'q-1') track('start');
+    document.querySelectorAll('#gotowosc .qscreen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('gotowosc').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  window.lsSubmit = async () => {
+    const email = document.getElementById('ls-email').value.trim();
+    const name = document.getElementById('ls-name').value.trim();
+    const consent = document.getElementById('ls-consent').checked;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const err = document.getElementById('ls-consent-error');
+    err.style.display = consent && emailOk ? 'none' : 'block';
+    err.textContent = !consent ? 'Zaznacz zgodę, żeby otrzymać raport.' : 'Podaj poprawny adres e-mail.';
+    if (!consent || !emailOk) return;
+
+    const result = computeResult({
+      age: num('ls-age'),
+      sex: state.sex,
+      heightCm: num('ls-height'),
+      weightKg: num('ls-weight'),
+      rhr: num('ls-rhr') || null,
+      activity: state.activity,
+      issue: state.issue,
+    });
+
+    renderResult(name || 'Sportowcu', result);
+    track('complete');
+
+    // wysyłka w tle — wynik pokazujemy niezależnie od powodzenia zapisu
+    try {
+      await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email, name,
+          fields: {
+            ls_score: result.score, ls_verdict: result.verdict,
+            ls_vo2: String(result.vo2), ls_bmi: String(result.bmi),
+            ls_rec: result.rec, ls_goal: state.goal, ls_issue: state.issue,
+            ls_age: num('ls-age'), ls_sex: state.sex,
+          },
+        }),
+      });
+      track('subscribed');
+    } catch (e) {
+      console.error('subscribe failed', e);
+    }
+  };
+
+  function renderResult(name, r) {
+    const colors = {
+      'ZDOLNY': '#4ADE80', 'ZDOLNY WARUNKOWO': '#EB5C1C',
+      'WYMAGA PRZYGOTOWANIA': '#C6352C', 'ODBUDOWA BAZY': '#C6352C',
+    };
+    const descriptions = {
+      'ZDOLNY': 'Twoja baza jest powyżej przeciętnej. Teraz gra toczy się o optymalizację — wyciśnięcie pełni potencjału i utrzymanie go przez dekady. Na selekcji liczyć się będzie każdy procent.',
+      'ZDOLNY WARUNKOWO': 'Jesteś w okolicach normy — to dobra wiadomość. Zła: norma to przeciętność, a warsztaty eliminują przeciętnych. Masz wyraźną rezerwę do zbudowania.',
+      'WYMAGA PRZYGOTOWANIA': 'Wynik poniżej normy dla wieku. Da się to odwrócić — VO2max reaguje na trening szybciej niż myślisz, ale potrzebujesz struktury, nie przypadkowych treningów.',
+      'ODBUDOWA BAZY': 'Wynik wymaga działania teraz. Dobra wiadomość: z tego poziomu pierwsze 8 tygodni daje największe przyrosty. Zacznij od fundamentów.',
+    };
+    const c = colors[r.verdict];
+    document.getElementById('r-name').textContent = name;
+    document.getElementById('r-stamp-text').textContent = r.verdict;
+    const stamp = document.getElementById('r-stamp');
+    stamp.style.color = c; stamp.style.borderColor = c;
+    document.getElementById('ls-verdict-p').textContent = descriptions[r.verdict];
+    const scoreN = document.getElementById('ls-score-n');
+    scoreN.textContent = r.score; scoreN.style.color = c;
+    const vo2El = document.getElementById('ls-m-vo2');
+    vo2El.textContent = r.vo2;
+    vo2El.className = 'mv ' + (r.vo2 >= r.norm ? 'good' : r.vo2 >= r.norm * 0.85 ? 'warn' : 'bad');
+    document.getElementById('ls-m-vo2-norm').textContent = `norma dla wieku: ~${r.norm} ml/kg/min`;
+    const bmiEl = document.getElementById('ls-m-bmi');
+    bmiEl.textContent = r.bmi;
+    bmiEl.className = 'mv ' + (r.bmi >= 18.5 && r.bmi <= 24.9 ? 'good' : 'warn');
+    const recEl = document.getElementById('ls-m-rec');
+    recEl.textContent = r.rec;
+    recEl.className = 'mv ' + (r.rec >= 75 ? 'good' : r.rec >= 55 ? 'warn' : 'bad');
+
+    document.querySelectorAll('#gotowosc .qscreen').forEach(s => s.classList.remove('active'));
+    document.getElementById('q-result').classList.add('active');
+    document.getElementById('gotowosc').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const ring = document.getElementById('ls-ring-fill');
+    ring.style.stroke = c;
+    setTimeout(() => { ring.style.strokeDashoffset = 477 - (477 * r.score / 100); }, 150);
+  }
+</script>
+
 </body>
 </html>

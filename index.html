@@ -2797,8 +2797,9 @@ window.addEventListener('scroll', function() {
         </div>
 
         <div class="rcta">
-          <h4>Nie chcesz czekać 5 dni?</h4>
-          <p>Pierwsza konsultacja gratis — sprawdzamy, czy pasujemy do siebie.</p>
+          <p id="ls-cta-personal" style="font-size: 15px; color: var(--text-primary); line-height: 1.6; margin-bottom: 14px;">—</p>
+          <h4>Omów swój wynik — konsultacja gratis</h4>
+          <p>Najbliższa edycja EXTREME: październik. 16 tygodni przygotowania zaczyna się teraz.</p>
           <a href="https://calendly.com/trening-kamilorawczak/30min" target="_blank" rel="noopener"
              class="btn btn-ember" onclick="window.dataLayer?.push({event:'ls_calendly'})">Zarezerwuj konsultację</a>
         </div>
@@ -3208,7 +3209,7 @@ window.addEventListener('scroll', function() {
 
       <!-- Prawa strona — karta cenowa -->
       <div class="pkg featured" style="border-top-width: 6px; position: sticky; top: 100px;">
-        <div class="pkg-tag">Rekrutacja otwarta</div>
+        <div class="pkg-tag">Najbliższa edycja: październik</div>
         <div class="pkg-philosophy"><span>Selekcja</span></div>
         <div class="pkg-name">EXTREME</div>
         <div class="pkg-duration">16 tygodni / 4 miesiące</div>
@@ -3216,11 +3217,18 @@ window.addEventListener('scroll', function() {
           <div class="pkg-price">550<span class="pkg-price-unit"> PLN/mc</span></div>
           <div class="pkg-price-note">Płatność miesięczna · rezygnujesz kiedy chcesz</div>
         </div>
-        <div style="background: rgba(235, 92, 28, 0.08); border: 1px solid rgba(235, 92, 28, 0.2); padding: 16px; text-align: center; margin-bottom: 24px;">
+        <div style="background: rgba(198, 53, 44, 0.1); border: 1px solid rgba(198, 53, 44, 0.3); padding: 14px 16px; text-align: center; margin-bottom: 14px;">
+          <p style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange-ember); margin: 0;">Pełne przygotowanie = 16 tygodni</p>
+          <p style="font-size: 13px; color: var(--text-secondary); margin: 6px 0 0;">Przy edycji w październiku okno startu zamyka się na przełomie czerwca i lipca.</p>
+        </div>
+        <div style="background: rgba(235, 92, 28, 0.08); border: 1px solid rgba(235, 92, 28, 0.2); padding: 16px; text-align: center; margin-bottom: 20px;">
           <p style="font-size: 14px; color: var(--text-primary); margin: 0;">Pierwsza konsultacja <strong style="color: var(--orange-ember);">GRATIS</strong></p>
           <p style="font-size: 12px; color: var(--text-muted); margin: 4px 0 0;">Sprawdzamy, czy pasujemy do siebie</p>
         </div>
         <a href="https://calendly.com/trening-kamilorawczak/30min" target="_blank" rel="noopener" class="btn btn-ember btn-block" style="padding: 22px 36px; font-size: 15px;">Zarezerwuj konsultację</a>
+        <p style="font-size: 12.5px; color: var(--text-muted); text-align: center; margin: 16px 0 0; line-height: 1.6;">
+          Prowadzę maksymalnie <strong style="color: var(--text-secondary);">5-8 osób równocześnie</strong> — każdy plan piszę osobiście.<br>To warunek jakości pracy 1:1, nie chwyt marketingowy.
+        </p>
       </div>
 
     </div>
@@ -3358,7 +3366,14 @@ window.addEventListener('scroll', function() {
         <div class="about-name">Kamil Orawczak</div>
         <div class="about-role">Performance Coach · TRENUJ PROFESJONALNIE</div>
 
-        <p>Specjalizuję się w <strong>przygotowaniu fizycznym do sportów wytrzymałościowych</strong> — biegi długodystansowe, OCR, HYROX. Twórca własnej metodologii bazującej na fizjologii wysiłku fizycznego.</p>
+        <div style="background: var(--bg-card); border-left: 3px solid var(--red-primary); padding: 26px 28px; margin: 24px 0;">
+          <p style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange-ember); margin: 0 0 16px;">List od trenera</p>
+          <p style="font-size: 15.5px; line-height: 1.75; margin: 0 0 14px;">Cześć, tu Kamil.</p>
+          <p style="font-size: 15.5px; line-height: 1.75; margin: 0 0 14px;">Całe moje sportowe życie to wymagające środowiska: biegi przeszkodowe OCR, HYROX, lata pracy w sportach zespołowych i ze sportowcami indywidualnymi. Do tego pasja, która została mi na stałe — siły specjalne i wojskowość. Nie dla estetyki, tylko dla sposobu, w jaki ludzie tam działają pod presją.</p>
+          <p style="font-size: 15.5px; line-height: 1.75; margin: 0 0 14px;">Dziś łączę te światy: przygotowuję ludzi do ekstremalnych wyzwań. Nie po to, żeby zaliczyli jedno wydarzenie — po to, żeby nawyki zbudowane w treningu przeniosły całe ich życie na wyższy poziom.</p>
+          <p style="font-size: 15.5px; line-height: 1.75; margin: 0 0 14px;">SSWB to test charakteru, który wygrywa się przygotowaniem. Jeśli ten test jest przed Tobą — zapraszam na rozmowę.</p>
+          <p style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.04em; color: var(--text-primary); margin: 18px 0 0;">— Kamil</p>
+        </div>
 
         <ul class="about-bullets">
           <li>Biegi długodystansowe (półmaraton, maraton, ultra)</li>
@@ -3594,7 +3609,14 @@ window.addEventListener('scroll', function() {
       'WYMAGA PRZYGOTOWANIA': 'Wynik poniżej normy dla wieku. Da się to odwrócić — VO2max reaguje na trening szybciej niż myślisz, ale potrzebujesz struktury, nie przypadkowych treningów.',
       'ODBUDOWA BAZY': 'Wynik wymaga działania teraz. Dobra wiadomość: z tego poziomu pierwsze 8 tygodni daje największe przyrosty. Zacznij od fundamentów.',
     };
+    const personal = {
+      'ZDOLNY': `Wynik ${r.score}/100 to baza, której szkoda nie przekuć w rezultat. Na selekcji liczy się każdy procent — i właśnie o tych procentach warto porozmawiać.`,
+      'ZDOLNY WARUNKOWO': `Wynik ${r.score}/100 to dokładnie profil, z którym pracuję najczęściej: rezerwa jest, brakuje systemu, który ją uwolni.`,
+      'WYMAGA PRZYGOTOWANIA': `Przy wyniku ${r.score}/100 największym przeciwnikiem jest czas. 16 tygodni systematycznej pracy potrafi odwrócić ten obraz.`,
+      'ODBUDOWA BAZY': `Wynik ${r.score}/100 to punkt startu, nie wyrok. Pierwsze 8 tygodni pracy daje największe przyrosty — warto je dobrze zaplanować.`,
+    };
     const c = colors[r.verdict];
+    document.getElementById('ls-cta-personal').textContent = personal[r.verdict];
     document.getElementById('r-name').textContent = name;
     document.getElementById('r-stamp-text').textContent = r.verdict;
     const stamp = document.getElementById('r-stamp');

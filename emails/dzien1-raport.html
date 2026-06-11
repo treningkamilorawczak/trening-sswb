@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<title>Raport Gotowości — Longevity Score</title>
+<style>
+  body { margin:0; padding:0; width:100% !important; }
+  table { border-collapse:collapse; }
+  img { border:0; outline:none; }
+  a { text-decoration:none; }
+  @media only screen and (max-width:600px) {
+    .container { width:100% !important; }
+    .px { padding-left:22px !important; padding-right:22px !important; }
+    .title-m { font-size:34px !important; }
+    .metric-cell { display:block !important; width:100% !important; padding:0 0 10px !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:0; background:#000000;">
+
+<!-- preheader -->
+<div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#000;">
+  Twój wynik: {$ls_score}/100 — werdykt: {$ls_verdict}. W środku: trzy liczby i to, co z nich wynika.
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#000000;">
+<tr>
+<td align="center" style="padding:28px 12px 48px;">
+
+<table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background:#14100E; border:1px solid #2A201C;">
+
+  <!-- ═══ WORDMARK ═══ -->
+  <tr>
+    <td class="px" style="padding:34px 44px 0;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+          <td style="font-family:'Arial Narrow', Arial, sans-serif; font-size:15px; font-weight:bold; letter-spacing:0.12em; text-transform:uppercase; color:#F2EFEE;">
+            TRENUJ&nbsp;PROFESJONALNIE <span style="color:#C6352C;">×</span> SSWB
+          </td>
+          <td align="right" style="font-family:'Courier New', monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#9B8179;">
+            ocena gotowości
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- ═══ MASTHEAD ═══ -->
+  <tr>
+    <td class="px" style="padding:30px 44px 14px; border-bottom:1px solid #2A201C;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="font-family:'Arial Narrow', Arial, sans-serif; font-weight:bold; font-size:26px; letter-spacing:0.06em; text-transform:uppercase; color:#F2EFEE;">Raport Gotowości</td>
+          <td align="right" style="font-family:'Courier New', monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#9B8179;">dzień 1 / 5</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- ═══ STEMPEL / WERDYKT ═══ -->
+  <tr>
+    <td class="px" style="padding:34px 44px 0;">
+      <span style="display:inline-block; font-family:'Arial Narrow', Arial, sans-serif; font-weight:bold; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; color:#EB5C1C; border:2px solid #EB5C1C; padding:7px 16px;">{$ls_verdict}</span>
+    </td>
+  </tr>
+
+  <!-- ═══ TYTUŁ ═══ -->
+  <tr>
+    <td class="px" style="padding:20px 44px 0;">
+      <h1 class="title-m" style="margin:0; font-family:'Arial Narrow', Arial, sans-serif; font-weight:bold; font-size:42px; line-height:1.02; letter-spacing:0.02em; text-transform:uppercase; color:#F2EFEE;">
+        {$name},<br>Twój wynik: <span style="color:#EB5C1C;">{$ls_score}/100</span>
+      </h1>
+    </td>
+  </tr>
+  <tr>
+    <td class="px" style="padding:14px 44px 0; font-family:Georgia, serif; font-style:italic; font-size:16px; line-height:1.5; color:#9B8179;">
+      Selekcja nie pyta o samopoczucie. Pyta o liczby. Oto Twoje — i&nbsp;to, co z&nbsp;nich wynika.
+    </td>
+  </tr>
+
+  <!-- ═══ METRYKI ═══ -->
+  <tr>
+    <td class="px" style="padding:30px 44px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="metric-cell" width="33%" valign="top" style="padding-right:8px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1F1815; border-top:2px solid #C6352C;">
+              <tr><td style="padding:14px 14px 4px; font-family:'Courier New', monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:#9B8179;">Szac. VO2max</td></tr>
+              <tr><td style="padding:0 14px 14px; font-family:'Arial Narrow', Arial, sans-serif; font-weight:bold; font-size:30px; color:#F2EFEE;">{$ls_vo2}</td></tr>
+            </table>
+          </td>
+          <td class="metric-cell" width="33%" valign="top" style="padding-right:8px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1F1815; border-top:2px solid #EB5C1C;">
+              <tr><td style="padding:14px 14px 4px; font-family:'Courier New', monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:#9B8179;">BMI</td></tr>
+              <tr><td style="padding:0 14px 14px; font-family:'Arial Narrow', Arial, sans-serif; font-weight:bold; font-size:30px; color:#F2EFEE;">{$ls_bmi}</td></tr>
+            </table>
+          </td>
+          <td class="metric-cell" width="33%" valign="top">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1F1815; border-top:2px solid #C6352C;">
+              <tr><td style="padding:14px 14px 4px; font-family:'Courier New', monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:#9B8179;">Regeneracja</td></tr>
+              <tr><td style="padding:0 14px 14px; font-family:'Arial Narrow', Arial, sans-serif; font-weight:bold; font-size:30px; color:#F2EFEE;">{$ls_rec}/100</td></tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- ═══ W TYM RAPORCIE ═══ -->
+  <tr>
+    <td class="px" style="padding:32px 44px 0;">
+      <p style="margin:0 0 14px; font-family:'Courier New', monospace; font-size:11px; font-weight:bold; letter-spacing:0.16em; text-transform:uppercase; color:#EB5C1C;">Co mówią Twoje liczby</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:Georgia, serif; font-size:15.5px; line-height:1.55; color:#D9D0CD;">
+        <tr>
+          <td valign="top" width="30" style="padding:5px 12px 5px 0; font-family:'Courier New', monospace; color:#C6352C; font-size:13px;">01</td>
+          <td valign="top" style="padding:5px 0;"><strong style="color:#F2EFEE;">VO2max {$ls_vo2} ml/kg/min.</strong> To jeden z najsilniejszych znanych medycynie predyktorów długości życia — badanie na 122&nbsp;007 osobach (JAMA, 2018) nie znalazło górnej granicy korzyści.</td>
+        </tr>
+        <tr>
+          <td valign="top" style="padding:5px 12px 5px 0; font-family:'Courier New', monospace; color:#C6352C; font-size:13px;">02</td>
+          <td valign="top" style="padding:5px 0;"><strong style="color:#F2EFEE;">BMI {$ls_bmi}.</strong> Meta-analiza 10,6 mln osób (Lancet, 2016): najniższe ryzyko przy 20–25. U&nbsp;mocno umięśnionych wskaźnik zawyża — dlatego mierzymy dalej, nie wyrokujemy.</td>
+        </tr>
+        <tr>
+          <td valign="top" style="padding:5px 12px 5px 0; font-family:'Courier New', monospace; color:#C6352C; font-size:13px;">03</td>
+          <td valign="top" style="padding:5px 0;"><strong style="color:#F2EFEE;">Indeks regeneracji {$ls_rec}/100.</strong> Tętno spoczynkowe i sen — czynniki z udokumentowanym związkiem ze śmiertelnością (meta-analizy: 1,25 mln i 1,38 mln osób).</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- ═══ DISCLAIMER ═══ -->
+  <tr>
+    <td class="px" style="padding:26px 44px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="border-left:2px solid #2A201C; padding:2px 0 2px 14px; font-family:'Courier New', monospace; font-size:11px; line-height:1.7; color:#9B8179;">
+            Wynik to estymacja walidowanym modelem naukowym (Jurca 2005, r≈0,8 z testem wysiłkowym) — nie pomiar i nie diagnoza. Pomiar robimy w Pakiecie Zdrowia (25–30 parametrów).
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- ═══ CTA ═══ -->
+  <tr>
+    <td class="px" align="center" style="padding:34px 44px 10px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td bgcolor="#C6352C">
+            <a href="https://calendly.com/trening-kamilorawczak/30min" target="_blank" style="display:inline-block; padding:15px 32px; font-family:'Arial Narrow', Arial, sans-serif; font-size:14px; font-weight:bold; letter-spacing:0.1em; text-transform:uppercase; color:#F2EFEE;">
+              Omów wynik — konsultacja gratis&nbsp;→
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="px" align="center" style="padding:0 44px 44px; font-family:Georgia, serif; font-style:italic; font-size:13px; color:#9B8179;">30 minut · bez zobowiązań · sprawdzamy, czy pasujemy do siebie</td>
+  </tr>
+
+  <!-- ═══ P.S. ═══ -->
+  <tr>
+    <td class="px" style="padding:22px 44px 36px; border-top:1px solid #2A201C;">
+      <p style="margin:0; font-family:Georgia, serif; font-size:14px; line-height:1.6; color:#9B8179;">
+        <span style="font-family:'Courier New', monospace; font-weight:bold; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#EB5C1C; margin-right:6px;">P.S.</span>
+        Za kilka dni wrócę z konkretnym planem działania pod Twój wynik. Trzymaj rękę na skrzynce.
+      </p>
+    </td>
+  </tr>
+</table>
+
+<!-- footer -->
+<table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
+  <tr>
+    <td align="center" style="padding:20px 16px 0; font-family:'Courier New', monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#684E46;">
+      Kamil Orawczak · TRENUJ PROFESJONALNIE × SSWB · trening-sswb.pl
+    </td>
+  </tr>
+</table>
+
+</td>
+</tr>
+</table>
+</body>
+</html>

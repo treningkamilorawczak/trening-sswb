@@ -2418,6 +2418,26 @@
   .rcta h4 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; text-transform: uppercase; margin-bottom: 8px; color: var(--text-primary); }
   .rcta p { color: var(--text-muted); font-size: 14px; margin-bottom: 18px; }
 
+  /* nav: przyciski zawsze w jednej linii */
+  nav.top-nav .btn { white-space: nowrap; }
+
+  /* quiz: wszystko wyśrodkowane */
+  #gotowosc .lscore-box { text-align: center; }
+  #gotowosc .qprogress { max-width: 420px; margin-left: auto; margin-right: auto; }
+  #gotowosc .qprogress-label::before { display: none; }
+  #gotowosc .qopts { max-width: 480px; margin-left: auto; margin-right: auto; }
+  #gotowosc .qopt { text-align: left; }
+  #gotowosc .qrow { max-width: 480px; margin-left: auto; margin-right: auto; }
+  #gotowosc .qfield input { text-align: center; }
+  #gotowosc .qnav { justify-content: center; gap: 18px; }
+  #gotowosc .qskip { margin-left: 0; }
+  #gotowosc label.qlegal { max-width: 480px; margin-left: auto; margin-right: auto; justify-content: center; text-align: left; }
+  #gotowosc .rscore { justify-content: center; }
+  #gotowosc .lsverdict { min-width: 230px; max-width: 480px; margin: 0 auto; }
+  #gotowosc .rdisclaimer { max-width: 560px; margin-left: auto; margin-right: auto; text-align: left; }
+  #gotowosc .rseq { max-width: 560px; margin-left: auto; margin-right: auto; }
+  #gotowosc .rseq-item { text-align: left; }
+
   @media (max-width: 700px) {
     .lscore-box { padding: 32px 22px; }
     .qrow, .rmetrics { grid-template-columns: 1fr; }
@@ -2524,7 +2544,6 @@ window.addEventListener('scroll', function() {
         <img src="img/sswb-logo.png" alt="Siły Specjalne w Biznesie" class="logo-sswb">
       </a>
       <ul class="nav-links">
-        <li><a href="#gotowosc" style="color: var(--orange-ember);">▸ Test gotowości</a></li>
         <li><a href="#metoda">Metoda</a></li>
         <li><a href="#proces">Proces</a></li>
         <li><a href="#pakiety">Pakiety</a></li>
@@ -2532,6 +2551,7 @@ window.addEventListener('scroll', function() {
         <li><a href="#faq">FAQ</a></li>
       </ul>
       <a href="https://dash.coachguru.app/user/login" target="_blank" rel="noopener" class="btn btn-outline nav-cta" style="padding: 10px 16px; margin-right: 2px;">Panel klienta</a>
+      <a href="#gotowosc" class="btn btn-ember nav-cta" style="padding: 10px 16px; margin: 0 2px 0 0;">Test gotowości</a>
       <a href="#rezerwacja" class="btn btn-primary nav-cta" style="margin-left: 0;">Rezerwuj</a>
     </div>
   </div>

@@ -2418,8 +2418,7 @@
   .rcta h4 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; text-transform: uppercase; margin-bottom: 8px; color: var(--text-primary); }
   .rcta p { color: var(--text-muted); font-size: 14px; margin-bottom: 18px; }
 
-  /* nav: pełna szerokość paska, wszystko w jednej linii */
-  nav.top-nav .container { max-width: 100%; padding: 0 32px; }
+  /* nav: wszystko w jednej linii, przyciski blisko siebie */
   nav.top-nav .nav-inner { flex-wrap: nowrap; gap: 16px; }
   nav.top-nav .nav-links { gap: 18px; flex-wrap: nowrap; }
   nav.top-nav .nav-links a { white-space: nowrap; }
@@ -2558,9 +2557,11 @@ window.addEventListener('scroll', function() {
         <li><a href="#o-mnie">O mnie</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
-      <a href="https://dash.coachguru.app/user/login" target="_blank" rel="noopener" class="btn btn-outline nav-cta" style="padding: 10px 16px; margin-right: 2px;">Panel klienta</a>
-      <a href="#gotowosc" class="btn btn-ember nav-cta" style="padding: 10px 16px; margin: 0 2px 0 0;">Test gotowości</a>
-      <a href="#rezerwacja" class="btn btn-primary nav-cta" style="margin-left: 0;">Rezerwuj</a>
+      <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
+        <a href="https://dash.coachguru.app/user/login" target="_blank" rel="noopener" class="btn btn-primary nav-cta" style="padding: 10px 16px; margin: 0;">Panel klienta</a>
+        <a href="#gotowosc" class="btn btn-primary nav-cta" style="padding: 10px 16px; margin: 0;">Test gotowości</a>
+        <a href="#rezerwacja" class="btn btn-primary nav-cta" style="padding: 10px 16px; margin: 0;">Rezerwuj</a>
+      </div>
     </div>
   </div>
 </nav>

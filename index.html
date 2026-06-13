@@ -2491,7 +2491,7 @@ window.addEventListener('scroll', function() {
   var isHovering = false;
   var touchResumeAt = 0;
   var halfWidth = 0;
-  var ticking = false;
+  var pos = 0; // własny licznik pozycji (float) — omija zaokrąglanie scrollLeft do int (Safari/iOS)
 
   function recompute() {
     halfWidth = track.scrollWidth / 2;
@@ -2501,22 +2501,20 @@ window.addEventListener('scroll', function() {
     return window.innerWidth <= 700 ? 0.45 : 0.55;
   }
 
-  function loopCheck() {
-    if (halfWidth <= 0) return;
-    if (marquee.scrollLeft >= halfWidth) {
-      marquee.scrollLeft -= halfWidth;
-    } else if (marquee.scrollLeft < 0) {
-      marquee.scrollLeft += halfWidth;
-    }
-  }
-
   function tick() {
     var now = Date.now();
     var userPaused = isHovering || now < touchResumeAt;
-    if (!userPaused) {
-      marquee.scrollLeft += speed();
+    if (userPaused) {
+      // podążaj za użytkownikiem, żeby po wznowieniu kontynuować płynnie
+      pos = marquee.scrollLeft;
+    } else {
+      pos += speed();
+      if (halfWidth > 0) {
+        if (pos >= halfWidth) pos -= halfWidth;
+        else if (pos < 0) pos += halfWidth;
+      }
+      marquee.scrollLeft = pos;
     }
-    loopCheck();
     requestAnimationFrame(tick);
   }
 
@@ -2524,21 +2522,12 @@ window.addEventListener('scroll', function() {
   marquee.addEventListener('mouseleave', function() { isHovering = false; });
   marquee.addEventListener('touchstart', function() { touchResumeAt = Date.now() + 99999; }, { passive: true });
   marquee.addEventListener('touchend', function() { touchResumeAt = Date.now() + 1500; }, { passive: true });
-  marquee.addEventListener('scroll', function() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function() { loopCheck(); ticking = false; });
-  }, { passive: true });
 
   window.addEventListener('resize', recompute);
-  window.addEventListener('load', function() {
-    recompute();
-    requestAnimationFrame(tick);
-  });
-  if (document.readyState === 'complete') {
-    recompute();
-    requestAnimationFrame(tick);
-  }
+  window.addEventListener('load', recompute);
+
+  recompute();
+  requestAnimationFrame(tick);
 })();
 </script>
 

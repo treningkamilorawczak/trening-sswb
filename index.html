@@ -213,9 +213,11 @@
   .hud-divider span {
     font-family: 'DM Mono', monospace;
     text-transform: uppercase;
-    color: var(--red-primary);
-    font-size: 11px;
-    letter-spacing: 0.2em;
+    color: var(--orange-light);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    white-space: nowrap;
   }
 
   /* === NAV === */
@@ -2343,6 +2345,7 @@
     position: relative; max-width: 720px; margin: 48px auto 0;
     background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
     border: 1px solid var(--border-subtle); padding: 44px 40px;
+    scroll-margin-top: 90px;
   }
   .lscore-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red-primary); }
   .lscore-box::after { content: ''; position: absolute; top: 12px; right: 12px; width: 12px; height: 12px; border-top: 1px solid var(--orange-ember); border-right: 1px solid var(--orange-ember); opacity: 0.6; }
@@ -3551,7 +3554,7 @@ window.addEventListener('scroll', function() {
     if (id === 'q-1') track('start');
     document.querySelectorAll('#gotowosc .qscreen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    document.getElementById('gotowosc').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelector('#gotowosc .lscore-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   window.lsSubmit = async () => {
@@ -3637,7 +3640,7 @@ window.addEventListener('scroll', function() {
 
     document.querySelectorAll('#gotowosc .qscreen').forEach(s => s.classList.remove('active'));
     document.getElementById('q-result').classList.add('active');
-    document.getElementById('gotowosc').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelector('#gotowosc .lscore-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
     const ring = document.getElementById('ls-ring-fill');
     ring.style.stroke = c;
     setTimeout(() => { ring.style.strokeDashoffset = 477 - (477 * r.score / 100); }, 150);

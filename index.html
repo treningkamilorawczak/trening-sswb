@@ -2484,6 +2484,7 @@ window.addEventListener('scroll', function() {
 
 // === TESTIMONIALS — INFINITE LOOP CAROUSEL ===
 (function() {
+  function boot() {
   var marquee = document.querySelector('.testimonials-marquee');
   var track = document.querySelector('.testimonials-track');
   if (!marquee || !track) return;
@@ -2528,6 +2529,9 @@ window.addEventListener('scroll', function() {
 
   recompute();
   requestAnimationFrame(tick);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
 </script>
 
@@ -3270,7 +3274,6 @@ window.addEventListener('scroll', function() {
       <h2>Co mówią ludzie,<br>z którymi <span class="accent">pracowałem.</span></h2>
     </div>
 
-    <p style="text-align: center; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px;">Przewijaj palcem lub poczekaj — opinie lecą w pętli</p>
     <div class="testimonials-marquee" role="region" aria-label="Opinie klientów">
       <div class="testimonials-track">
         <!-- ORYGINALNE 4 KARTY -->

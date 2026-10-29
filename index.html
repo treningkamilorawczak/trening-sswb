@@ -2631,7 +2631,7 @@ window.addEventListener('scroll', function() {
 <!-- ═══════════════════════════════════════════════════════════════
      SEKCJA 02B: LONGEVITY SCORE / TEST GOTOWOŚCI
      ═══════════════════════════════════════════════════════════════ -->
-<section class="dark" id="gotowosc">
+<section class="dark" id="gotowosc" data-track-view="test">
   <div class="container">
     <div class="section-header" style="text-align: center;">
       <div class="tag ember"><span>Diagnostyka · 0 PLN · 2 minuty</span></div>
@@ -3158,7 +3158,7 @@ window.addEventListener('scroll', function() {
 <!-- ═══════════════════════════════════════════════════════════════
      SEKCJA 05: PAKIETY
      ═══════════════════════════════════════════════════════════════ -->
-<section id="pakiety">
+<section id="pakiety" data-track-view="cennik">
   <div class="container">
     <div class="section-header" style="text-align: center;">
       <div class="tag"><span>Pakiet</span></div>
@@ -3549,7 +3549,10 @@ window.addEventListener('scroll', function() {
 <script type="module">
   import { computeResult } from './js/longevity-score.js';
 
-  const track = (event) => { window.dataLayer?.push({ event: `ls_${event}` }); };
+  const track = (event, props) => {
+    window.dataLayer?.push({ event: `ls_${event}` });
+    window.phTrack?.(`longevity_test_${event}`, props);
+  };
 
   const state = { sex: null, activity: null, goal: null, issue: null };
 
@@ -3600,7 +3603,7 @@ window.addEventListener('scroll', function() {
     });
 
     renderResult(name || 'Sportowcu', result);
-    track('complete');
+    track('complete', { verdict: result.verdict, goal: state.goal });
 
     // wysyłka w tle — wynik pokazujemy niezależnie od powodzenia zapisu
     try {
@@ -3674,6 +3677,50 @@ window.addEventListener('scroll', function() {
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
+
+<!-- PostHog (bez ciasteczek, zgodne z RODO) — projekt „TierONE strony” -->
+<script>
+  (function () {
+    var queue = [];
+    window.phTrack = function (event, props) {
+      if (window.posthog && window.posthog.__loaded) window.posthog.capture(event, props);
+      else queue.push([event, props]);
+    };
+    var s = document.createElement('script');
+    s.src = 'https://eu-assets.i.posthog.com/static/array.full.js';
+    s.async = true;
+    s.onload = function () {
+      window.posthog.init('phc_vMfsbqaurcctWReN5D8ahAAKWKbx6VhTs3RsAPjfdx3z', {
+        api_host: 'https://eu.i.posthog.com',
+        cookieless_mode: 'always',
+        person_profiles: 'identified_only',
+        disable_session_recording: true,
+        loaded: function (ph) { queue.forEach(function (a) { ph.capture(a[0], a[1]); }); queue = []; }
+      });
+    };
+    document.head.appendChild(s);
+
+    // Sekcje oznaczone data-track-view → section_viewed (raz na wizytę)
+    var seen = {};
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var section = e.target.getAttribute('data-track-view');
+        if (!e.isIntersecting || seen[section]) return;
+        seen[section] = true;
+        window.phTrack('section_viewed', { section: section });
+      });
+    }, { rootMargin: '0px 0px -40% 0px' });
+    document.querySelectorAll('[data-track-view]').forEach(function (el) { observer.observe(el); });
+
+    // Kliknięcie w rezerwację konsultacji (Calendly)
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href*="calendly.com"]');
+      if (!a) return;
+      var section = a.closest('section');
+      window.phTrack('consultation_clicked', { section: section && section.id || 'inna' });
+    });
+  })();
+</script>
 
 </body>
 </html>
